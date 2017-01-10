@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
             .Where(distance=>Input.GetMouseButton(0))
             .Select(distance=>FingerPos(Input.mousePosition))
             .Subscribe(distance => {
-                Vector2 dis = distance-Center;
+                Vector2 dis = new Vector2(distance.x-Center.x,0);
                 Player.transform.Translate(dis*Time.deltaTime);
             });
     }
