@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour {
             .Select(distance=>FingerPos(Input.mousePosition))
             .Subscribe(distance => {
                 Vector2 dis = new Vector2(distance.x-Center.x,0);
+                Direction(dis);
                 Player.transform.Translate(dis*Time.deltaTime);
             });
     }
@@ -54,5 +55,18 @@ public class PlayerController : MonoBehaviour {
             return Center;
         //--------------------------------------------------------------
         return fingerpos;
+    }
+    void Direction(Vector2 dis) {
+        print(dis);
+        var x = Player.transform.localScale.x;
+        if ( 0<dis.x  ) {
+            x = Mathf.Abs(Player.transform.localScale.x);
+        } else {
+            x = -Mathf.Abs(Player.transform.localScale.x);
+        }
+        Player.transform.localScale = new Vector3(
+            x,
+            Player.transform.localScale.y,
+            Player.transform.localScale.z);
     }
 }
