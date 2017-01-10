@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
-    private Vector2 getpovit;
+    private Vector2 Center;
     public GameObject Player;
 	void Start () {
-        getpovit = GetPovit( );
+        Center = GetPovit( );
         GetDistancefromPovittoFinger( );
     }
     /// <summary>
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
             .Where(distance=>Input.GetMouseButton(0))
             .Select(distance=>FingerPos(Input.mousePosition))
             .Subscribe(distance => {
-                Vector2 dis = distance-getpovit;
+                Vector2 dis = distance-Center;
                 Player.transform.Translate(dis*Time.deltaTime);
             });
     }
@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour {
     }
     /// <summary>
     /// 指の位置を算出する
+    /// 1.指の位置がUI/Controllerオブジェクトの高さ以上だった場合現在のCenterをreturnする
     /// </summary>
     /// <param name="fingerpos">
     /// タッチしたスクリーン座標
@@ -47,6 +48,11 @@ public class PlayerController : MonoBehaviour {
     /// </returns>
     Vector2 FingerPos(Vector2 fingerpos) {
         fingerpos = Camera.main.ScreenToWorldPoint(fingerpos);
+        //1-------------------------------------------------------------
+        var Height = GetComponent<RectTransform>( ).sizeDelta.y;
+        if ( Height < Input.mousePosition.y ) 
+            return Center;
+        //--------------------------------------------------------------
         return fingerpos;
     }
 }
