@@ -25,7 +25,6 @@ public class StageController : MonoBehaviour {
         Gizmos.DrawLine(UpperRight , LowerRight);
         Gizmos.DrawLine(LowerRight , LowerLeft);
     }
-
     void Start() {
         //地面を取得
         floor = GameObject.Find("Floor").transform;
@@ -36,9 +35,4 @@ public class StageController : MonoBehaviour {
         StageRect.yMin = floorBounds.min.y;
         StageRect.yMax = floorBounds.max.y + StageHeight;
     }
-
-    void Update() {
-
-    }
-
 }
