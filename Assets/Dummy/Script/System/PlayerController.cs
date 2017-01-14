@@ -9,8 +9,12 @@ public class PlayerController : MonoBehaviour {
 
     private Vector2 Center;
     public GameObject Player;
+    /// <summary>
+    /// 右向きtrue;左向きfalse
+    /// </summary>
+    public static bool PlayerDirectoin { get; private set; }
 	void Start () {
-        Center = GetPovit( );
+        PlayerDirectoin = true;
         GetDistancefromPovittoFinger( );
     }
     /// <summary>
@@ -19,7 +23,10 @@ public class PlayerController : MonoBehaviour {
     void GetDistancefromPovittoFinger() {
         this.UpdateAsObservable( )
             .Where(distance=>Input.GetMouseButton(0))
-            .Select(distance=>FingerPos(Input.mousePosition))
+            .Select(distance=> {
+                Center = GetPovit( );
+                return FingerPos(Input.mousePosition);
+                })
             .Subscribe(distance => {
                 Vector2 dis = new Vector2(distance.x-Center.x,0);
                 Direction(dis);
@@ -56,12 +63,22 @@ public class PlayerController : MonoBehaviour {
         //--------------------------------------------------------------
         return fingerpos;
     }
+    /// <summary>
+    /// Characterの向きを反転させる
+    /// </summary>
+    /// <param name="dis">
+    /// 指と中央の差分
+    /// </param>
     void Direction(Vector2 dis) {
-        print(dis);
         var x = Player.transform.localScale.x;
+        //右向き
         if ( 0<dis.x  ) {
+            PlayerDirectoin = true;
             x = Mathf.Abs(Player.transform.localScale.x);
-        } else {
+        }
+        //左向き
+        else {
+            PlayerDirectoin = false;
             x = -Mathf.Abs(Player.transform.localScale.x);
         }
         Player.transform.localScale = new Vector3(
