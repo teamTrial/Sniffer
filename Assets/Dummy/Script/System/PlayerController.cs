@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour {
             x = Mathf.Abs(Player.transform.localScale.x);
         }
         //左向き
-        else {
+        else if ( dis.x <0) {
             PlayerDirectoin = false;
             x = -Mathf.Abs(Player.transform.localScale.x);
         }
