@@ -44,7 +44,7 @@ public class Actoin : MonoBehaviour
             if (touch.phase == TouchPhase.Stationary)
             {
                 counter += 0.5f;
-                if (counter > 10f)
+                if (counter > 5f)
                 {
                     time += 0.1f;
                     if (5f < time)
@@ -58,7 +58,7 @@ public class Actoin : MonoBehaviour
             else if (touch.phase == TouchPhase.Moved)
             {
                 counter += 0.5f;
-                if (counter > 10f)
+                if (counter > 5f)
                 {
                     print("移動したのでキャンセル");
                     time = 0;
