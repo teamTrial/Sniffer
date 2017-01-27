@@ -58,8 +58,9 @@ public class PlayerController : MonoBehaviour {
         fingerpos = Camera.main.ScreenToWorldPoint(fingerpos);
         //1-------------------------------------------------------------
         var Height = GetComponent<RectTransform>( ).sizeDelta.y;
-        if ( Height < Input.mousePosition.y ) 
+        if ( Height < Input.mousePosition.y ) {
             return Center;
+        }
         //--------------------------------------------------------------
         return fingerpos;
     }

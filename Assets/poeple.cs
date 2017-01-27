@@ -1,0 +1,50 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class poeple : MonoBehaviour {
+    float counter;
+    int limit=10;
+    bool countdowsflag;
+    public float speed=1f;
+    void Start () {
+        counter=0;
+    }
+    
+    void Update () {
+        walk();
+        print(counter);
+        if(countdowsflag){
+            counter+=Time.deltaTime;
+        }
+        if(limit<counter){
+            Destroy(this.gameObject);
+        }
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag=="MainCamera"){
+            counter=0;
+            countdowsflag=false;
+        }
+        
+    }
+    //見えなくなったら
+    void OnTriggerExit2D(Collider2D other){
+        if(other.tag=="MainCamera"){
+            countdowsflag=true;
+        }
+    }
+    void walk(){
+        int direction=1;
+        //左
+        if(this.transform.localScale.x<0){
+            direction=-1;
+        }
+        //右
+        else{
+            direction=1;
+        }
+        this.transform.Translate(direction*speed*Time.deltaTime,0,0);
+    }
+}

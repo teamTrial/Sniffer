@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - controller
+  - camera
   layers:
   - Default
   - TransparentFX
