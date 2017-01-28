@@ -7,13 +7,15 @@ public class poeple : MonoBehaviour {
     int limit=10;
     bool countdowsflag;
     public float speed=1f;
+    private InstanceEnemy Right,Left;
     void Start () {
         counter=0;
+        Right=GameObject.Find("CreatePeople_Right").GetComponent<InstanceEnemy>();
+        Left=GameObject.Find("CreatePeople_Left").GetComponent<InstanceEnemy>();
     }
     
     void Update () {
         walk();
-        print(counter);
         if(countdowsflag){
             counter+=Time.deltaTime;
         }
@@ -46,5 +48,10 @@ public class poeple : MonoBehaviour {
             direction=1;
         }
         this.transform.Translate(direction*speed*Time.deltaTime,0,0);
+    }
+    void OnDestroy()
+    {
+       Right.enemyCounter--;
+       Left.enemyCounter--; 
     }
 }
