@@ -19,7 +19,6 @@ public class InstanceEnemy : MonoBehaviour {
     }
     void Instance(float randompos){
         var ins=Instantiate(enemy,pos).gameObject;
-        var dir=ins.GetComponent<poeple>().speed;
         if(GameObject.Find("Main Camera").transform.position.x<this.transform.position.x){
             //左向き左移動
 			ins.transform.position=	new Vector3(pos.transform.position.x+(-randompos),pos.transform.position.y,pos.transform.position.z);

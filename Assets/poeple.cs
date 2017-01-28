@@ -9,6 +9,7 @@ public class poeple : MonoBehaviour {
     public float speed=1f;
     private InstanceEnemy Right,Left;
     void Start () {
+        speed=speed*Random.Range(0.3f,1.3f);
         counter=0;
         Right=GameObject.Find("CreatePeople_Right").GetComponent<InstanceEnemy>();
         Left=GameObject.Find("CreatePeople_Left").GetComponent<InstanceEnemy>();
