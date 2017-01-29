@@ -35,8 +35,10 @@ public class Actoin : MonoBehaviour
     void Update()
     {
         CheckLongtap();
+    }
+    void LateUpdate()
+    {
         checkAnim();
-        
     }
     void CheckLongtap()
     {
@@ -47,23 +49,26 @@ public class Actoin : MonoBehaviour
             //タッチしている＆指が動いてない
             if (touch.phase == TouchPhase.Stationary)
             {
-                counter += 0.5f;
-                if (counter > 5f)
+                //丸めている？
+                counter += Time.deltaTime;
+                if (0.1f<counter)
                 {
-                    time += 0.5f;
-                    if (5f < time)
+                    time += Time.deltaTime;
+                    if (1f < time)
                     {
                         print("チャージ完了");
                         flag = true;
                         counter = 0;
                     }
                 }
+                setAnimation(1);
+                
             }
             //タッチしている＆指が動いている
             else if (touch.phase == TouchPhase.Moved)
             {
-                counter += 0.5f;
-                if (counter > 5f)
+                counter += Time.deltaTime;
+                if (0.1f<counter)
                 {
                     // print("移動したのでキャンセル");
                     //初期化----------------
@@ -72,10 +77,15 @@ public class Actoin : MonoBehaviour
                     counter = 0;
                     //---------------------
                 }
+                setAnimation(1);
             }
             //タッチしている指が離れた
             else if (touch.phase == TouchPhase.Ended)
             {
+                if(anim.GetInteger("Anim")<0){
+                    print("指離れる");
+                    setAnimation(0);
+                }
                 if (flag)
                 {
                     print("構えるモーション");
@@ -86,7 +96,6 @@ public class Actoin : MonoBehaviour
                 counter = 0;
                 return;
             }
-            setAnimation(1);
         }
     }
     /// <summary>
