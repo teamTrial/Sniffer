@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Actoin : MonoBehaviour
 {
     public float Longtap = 1f;
@@ -13,6 +13,7 @@ public class Actoin : MonoBehaviour
     Vector3 old;
     float counter;
     Animator anim;
+    public Button center;
     void Start()
     {
         anim=GetComponent<Animator>();
@@ -20,8 +21,13 @@ public class Actoin : MonoBehaviour
     }
     void Attack()
     {
-        var doubleclick = this.UpdateAsObservable()
-        .Where(_ => Input.GetMouseButtonDown(0));
+        var singleclick=center.onClick.AsObservable();
+        singleclick
+        .Buffer(singleclick.Throttle(TimeSpan.FromMilliseconds(200)))
+        .Where(tap=> 1 >= tap.Count)
+        .Subscribe(_=>setAnimation(2));
+
+        var doubleclick =center.onClick.AsObservable();
         doubleclick
         // 0.2秒以内のメッセージをまとめる
         .Buffer(doubleclick.Throttle(TimeSpan.FromMilliseconds(200)))
@@ -51,34 +57,11 @@ public class Actoin : MonoBehaviour
             //タッチしている＆指が動いてない
             if (touch.phase == TouchPhase.Stationary)
             {
-                //丸めている？
-                counter += Time.deltaTime;
-                if (0.1f<counter)
-                {
-                    time += Time.deltaTime;
-                    if (1f < time)
-                    {
-                        print("チャージ完了");
-                        flag = true;
-                        counter = 0;
-                    }
-                }
                 setAnimation(1);
-                
             }
             //タッチしている＆指が動いている
             else if (touch.phase == TouchPhase.Moved)
             {
-                counter += Time.deltaTime;
-                if (0.1f<counter)
-                {
-                    // print("移動したのでキャンセル");
-                    //初期化----------------
-                    time = 0;
-                    flag = false;
-                    counter = 0;
-                    //---------------------
-                }
                 setAnimation(1);
             }
             //タッチしている指が離れた
@@ -87,15 +70,6 @@ public class Actoin : MonoBehaviour
                 if(anim.GetInteger("Anim")<2){
                     setAnimation(0);
                 }
-                if (flag)
-                {
-                    print("構えるモーション");
-                    setAnimation(2);
-                }
-                time=0;
-                flag = false;
-                counter = 0;
-                return;
             }
         }
     }
