@@ -30,6 +30,10 @@ public class poeple : MonoBehaviour {
             counter=0;
             countdowsflag=false;
         }
+        if(other.tag=="controller") return;
+        if(other.tag=="hand"){
+           Destroy(this.gameObject);
+        }
         
     }
     //見えなくなったら

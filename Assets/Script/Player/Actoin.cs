@@ -31,10 +31,12 @@ public class Actoin : MonoBehaviour
                 print("たぶ");
                 setAnimation(3);
             });
-    }
-    void Update()
-    {
-        CheckLongtap();
+        var longtap=this.UpdateAsObservable();
+        longtap.TakeUntil(doubleclick).RepeatSafe()
+        .Subscribe(_=>{
+                CheckLongtap();
+                
+            });
     }
     void LateUpdate()
     {
@@ -82,8 +84,7 @@ public class Actoin : MonoBehaviour
             //タッチしている指が離れた
             else if (touch.phase == TouchPhase.Ended)
             {
-                if(anim.GetInteger("Anim")<0){
-                    print("指離れる");
+                if(anim.GetInteger("Anim")<2){
                     setAnimation(0);
                 }
                 if (flag)

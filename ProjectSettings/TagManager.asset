@@ -6,6 +6,7 @@ TagManager:
   tags:
   - controller
   - camera
+  - hand
   layers:
   - Default
   - TransparentFX
