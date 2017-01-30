@@ -7,11 +7,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Actoin : MonoBehaviour
 {
-    public float Longtap = 1f;
-    float time = 0;
-    bool flag = false;
-    Vector3 old;
-    float counter;
     Animator anim;
     public Button center;
     void Start()
@@ -26,7 +21,6 @@ public class Actoin : MonoBehaviour
         .Buffer(singleclick.Throttle(TimeSpan.FromMilliseconds(200)))
         .Where(tap=> 1 >= tap.Count)
         .Subscribe(_=>setAnimation(2));
-
         var doubleclick =center.onClick.AsObservable();
         doubleclick
         // 0.2秒以内のメッセージをまとめる
@@ -34,7 +28,6 @@ public class Actoin : MonoBehaviour
         // タップ回数が2回以上だったら処理する
         .Where(tap => tap.Count >= 2)
         .Subscribe(tap => {
-                print("たぶ");
                 setAnimation(3);
             });
         var longtap=this.UpdateAsObservable();

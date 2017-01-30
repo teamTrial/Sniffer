@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
-
+    
     private Vector2 Center;
     public GameObject Player;
     /// <summary>
     /// 右向きtrue;左向きfalse
     /// </summary>
     public static bool PlayerDirectoin { get; private set; }
-	void Start () {
+    void Start () {
         PlayerDirectoin = true;
         GetDistancefromPovittoFinger( );
     }
@@ -22,15 +22,17 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     void GetDistancefromPovittoFinger() {
         this.UpdateAsObservable( )
-            .Where(distance=>Input.GetMouseButton(0))
-            .Select(distance=> {
+        .Where(distance=>Input.GetMouseButton(0))
+        .Select(distance=> {
                 Center = GetPovit( );
                 return FingerPos(Input.mousePosition);
-                })
-            .Subscribe(distance => {
+            })
+        .Subscribe(distance => {
                 Vector2 dis = new Vector2(distance.x-Center.x,0);
-                Direction(dis);
-                Player.transform.Translate(dis*Time.deltaTime);
+                if(!(-0.6f<dis.x&&dis.x<0.6f)){
+                    Direction(dis);
+                    Player.transform.Translate(dis*Time.deltaTime);
+                }
             });
     }
     /// <summary>
