@@ -8,6 +8,10 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour {
     
     private Vector2 Center;
+    public static bool attackFlag{
+        get; 
+        private set;
+        }
     public GameObject Player;
     /// <summary>
     /// 右向きtrue;左向きfalse
@@ -28,8 +32,11 @@ public class PlayerController : MonoBehaviour {
                 return FingerPos(Input.mousePosition);
             })
         .Subscribe(distance => {
+            print(attackFlag);
                 Vector2 dis = new Vector2(distance.x-Center.x,0);
+                attackFlag=true;
                 if(!(-0.6f<dis.x&&dis.x<0.6f)){
+                    attackFlag=false;
                     Direction(dis);
                     Player.transform.Translate(dis*Time.deltaTime);
                 }

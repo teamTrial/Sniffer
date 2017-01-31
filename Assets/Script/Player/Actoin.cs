@@ -47,18 +47,20 @@ public class Actoin : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            //タッチしている＆指が動いてない
-            if (touch.phase == TouchPhase.Stationary)
-            {
-                setAnimation(1);
-            }
-            //タッチしている＆指が動いている
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                setAnimation(1);
+            if(!PlayerController.attackFlag){
+                //タッチしている＆指が動いてない
+                if (touch.phase == TouchPhase.Stationary)
+                {
+                    setAnimation(1);
+                }
+                //タッチしている＆指が動いている
+                else if (touch.phase == TouchPhase.Moved)
+                {
+                    setAnimation(1);
+                }
             }
             //タッチしている指が離れた
-            else if (touch.phase == TouchPhase.Ended)
+            if (touch.phase == TouchPhase.Ended)
             {
                 if(anim.GetInteger("Anim")<2){
                     setAnimation(0);

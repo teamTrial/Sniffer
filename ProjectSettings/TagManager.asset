@@ -7,6 +7,7 @@ TagManager:
   - controller
   - camera
   - hand
+  - stand
   layers:
   - Default
   - TransparentFX
