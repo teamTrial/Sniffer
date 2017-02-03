@@ -34,7 +34,9 @@ public class poeple : MonoBehaviour {
         if(other.tag=="hand"){
            Destroy(this.gameObject);
         }
-        
+        if(other.tag=="stand"){
+            print("無月");
+        }
     }
     //見えなくなったら
     void OnTriggerExit2D(Collider2D other){

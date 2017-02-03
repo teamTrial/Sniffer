@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour {
                 return FingerPos(Input.mousePosition);
             })
         .Subscribe(distance => {
-            print(attackFlag);
                 Vector2 dis = new Vector2(distance.x-Center.x,0);
                 attackFlag=true;
                 if(!(-0.6f<dis.x&&dis.x<0.6f)){
