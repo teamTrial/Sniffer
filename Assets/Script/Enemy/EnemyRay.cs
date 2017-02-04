@@ -6,7 +6,8 @@ public class EnemyRay : MonoBehaviour {
     
     [HeaderAttribute("見える範囲")]
     public float maxDistance = 3;
-
+    [HeaderAttribute("目線")]
+    public float height=0.5f;
     StageManager  stagemanager;    
     void Start () {
         stagemanager=GameObject.Find("Manager").GetComponent<StageManager>();
@@ -19,7 +20,7 @@ public class EnemyRay : MonoBehaviour {
             
             //Rayの長さ
             Vector2 dir=Direction();
-            Vector2 pos=new Vector2(transform.position.x+(dir.x*0.5f),transform.position.y);
+            Vector2 pos=new Vector2(transform.position.x+(dir.x*0.5f),transform.position.y+height);
             RaycastHit2D hit = Physics2D.Raycast(pos, dir,maxDistance);
 #if UNITY_EDITOR
             Debug.DrawRay(pos,dir*maxDistance,Color.green);
