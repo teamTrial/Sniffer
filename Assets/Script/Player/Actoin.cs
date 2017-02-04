@@ -9,6 +9,11 @@ public class Actoin : MonoBehaviour
 {
     Animator anim;
     public Button center;
+    //攻撃中は移動できないように
+    public static bool attackFlag{
+        get;
+        private set;
+    }
     void Start()
     {
         anim=GetComponent<Animator>();
@@ -20,22 +25,26 @@ public class Actoin : MonoBehaviour
         singleclick
         .Buffer(singleclick.Throttle(TimeSpan.FromMilliseconds(200)))
         .Where(tap=> 1 >= tap.Count)
-        .Subscribe(_=>setAnimation(2));
+        .Subscribe(tap => {
+            attackFlag=true;
+            setAnimation(2);
+        });
+        
         var doubleclick =center.onClick.AsObservable();
         doubleclick
         // 0.2秒以内のメッセージをまとめる
-        .Buffer(doubleclick.Throttle(TimeSpan.FromMilliseconds(200)))
+        .Buffer(doubleclick.Throttle(TimeSpan.FromMilliseconds(300)))
         // タップ回数が2回以上だったら処理する
         .Where(tap => tap.Count >= 2)
         .Subscribe(tap => {
-                setAnimation(3);
-            });
+            attackFlag=true;
+            setAnimation(3);
+        });
         var longtap=this.UpdateAsObservable();
         longtap.TakeUntil(doubleclick).RepeatSafe()
         .Subscribe(_=>{
-                CheckLongtap();
-                
-            });
+            CheckLongtap();
+        });
     }
     void LateUpdate()
     {
@@ -47,7 +56,7 @@ public class Actoin : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if(!PlayerController.attackFlag){
+            if(!attackFlag){
                 //タッチしている＆指が動いてない
                 if (touch.phase == TouchPhase.Stationary)
                 {
@@ -82,8 +91,10 @@ public class Actoin : MonoBehaviour
         AnimatorStateInfo animInfo = anim.GetCurrentAnimatorStateInfo(0);
         if(1.0f<animInfo.normalizedTime )
         {
+            //アニメーションが止まると移動以外だった場合
             if(1<anim.GetInteger("Anim")){
                 setAnimation(0);
+                attackFlag=false;
             }
         }
     }

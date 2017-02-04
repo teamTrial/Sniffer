@@ -12,7 +12,7 @@ public class InstanceEnemy : MonoBehaviour {
         enemyCounter=0;
         pos=this.transform;
         Observable.Timer(TimeSpan.FromSeconds(5),TimeSpan.FromSeconds(2))
-        .Where(_=>enemyCounter<enemyLimit&&0<enemyCounter)
+        .Where(_=>0<=enemyCounter&&enemyCounter<=enemyLimit)
         .Subscribe(_=>{
                 Instance(UnityEngine.Random.Range(-5.5f,0.5f));
             }).AddTo(this.gameObject);

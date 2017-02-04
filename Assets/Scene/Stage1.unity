@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03b7e413d1aeec44a4d288a942473d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxDistance: 5
 --- !u!1 &189020893
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,11 +555,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 3.3
+      value: 8.543
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.15
+      value: 0.093
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.z

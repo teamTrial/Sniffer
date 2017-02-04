@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114151512961612248}
   - component: {fileID: 61051720841451088}
   - component: {fileID: 50236687127480496}
+  - component: {fileID: 114074350119586434}
   m_Layer: 0
   m_Name: people
   m_TagString: Untagged
@@ -38,8 +39,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1596776687896712}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.3, y: 0.15, z: 90}
-  m_LocalScale: {x: 1.260755, y: 1.0654709, z: 1}
+  m_LocalPosition: {x: 8.543, y: 0.093, z: 90}
+  m_LocalScale: {x: -1.260755, y: 1.0654709, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -78,6 +79,18 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.58000004, y: 1.2}
+--- !u!114 &114074350119586434
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596776687896712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a03b7e413d1aeec44a4d288a942473d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 5
 --- !u!114 &114151512961612248
 MonoBehaviour:
   m_ObjectHideFlags: 1
