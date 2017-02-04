@@ -8,7 +8,9 @@ public class poeple : MonoBehaviour {
     bool countdowsflag;
     public float speed=1f;
     private InstanceEnemy Right,Left;
+    private StageManager StageManager;
     void Start () {
+        StageManager=GameObject.Find("Manager").GetComponent<StageManager>();
         speed=speed*Random.Range(0.3f,1.3f);
         counter=0;
         Right=GameObject.Find("CreatePeople_Right").GetComponent<InstanceEnemy>();
@@ -32,7 +34,11 @@ public class poeple : MonoBehaviour {
         }
         if(other.tag=="controller") return;
         if(other.tag=="hand"){
-           Destroy(this.gameObject);
+            Destroy(this.gameObject);
+            print("aaa");
+            StageManager.EnemyNum=StageManager.EnemyNum+1;
+            StageManager.UpdateNum();
+            
         }
         if(other.tag=="stand"){
             print("無月");
@@ -58,7 +64,7 @@ public class poeple : MonoBehaviour {
     }
     void OnDestroy()
     {
-       Right.enemyCounter--;
-       Left.enemyCounter--; 
+        Right.enemyCounter--;
+        Left.enemyCounter--;
     }
 }

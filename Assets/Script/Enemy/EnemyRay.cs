@@ -6,8 +6,10 @@ public class EnemyRay : MonoBehaviour {
     
     [HeaderAttribute("見える範囲")]
     public float maxDistance = 3;
-    
+
+    StageManager  stagemanager;    
     void Start () {
+        stagemanager=GameObject.Find("Manager").GetComponent<StageManager>();
         
     }
     void OnTriggerStay2D(Collider2D other)
