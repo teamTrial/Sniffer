@@ -83,7 +83,7 @@ public class FadeManager : MonoBehaviour
 
 
 				GUI.Box (new Rect (10, 10, 300, 50 + scenes.Count * 25), "Fade Manager(Debug Mode)");
-				GUI.Label (new Rect (20, 30, 280, 20), "Current Scene : " + Application.loadedLevelName);
+				GUI.Label (new Rect (20, 30, 280, 20), "Current Scene : " + SceneManager.GetActiveScene().name);
 
 				int i = 0;
 				foreach (string sceneName in scenes) {

@@ -35,13 +35,12 @@ public class poeple : MonoBehaviour {
         if(other.tag=="controller") return;
         if(other.tag=="hand"){
             Destroy(this.gameObject);
-            print("aaa");
             StageManager.EnemyNum=StageManager.EnemyNum+1;
             StageManager.UpdateNum();
             
         }
         if(other.tag=="stand"){
-            print("無月");
+            print("構えるモーション接触");
         }
     }
     //見えなくなったら

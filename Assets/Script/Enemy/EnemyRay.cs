@@ -8,10 +8,7 @@ public class EnemyRay : MonoBehaviour {
     public float maxDistance = 3;
     [HeaderAttribute("目線")]
     public float height=0.5f;
-    StageManager  stagemanager;    
     void Start () {
-        stagemanager=GameObject.Find("Manager").GetComponent<StageManager>();
-        
     }
     void OnTriggerStay2D(Collider2D other)
     {
