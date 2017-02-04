@@ -22,8 +22,7 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     void GetDistancefromPovittoFinger() {
         this.UpdateAsObservable( )
-        .Do(clear=>print(StageClear.ClearFlag))        
-        .TakeWhile(hoge=>!StageClear.ClearFlag)
+        .TakeWhile(clearFlag=>!StageClear.ClearFlag)
         .Where(distance=>Input.GetMouseButton(0))
         .Select(distance=> {
                 Center = GetPovit( );
