@@ -9,7 +9,8 @@ public class PinchinPinchOut : MonoBehaviour {
 
     // デバッグ用テキスト（scaleサイズ確認用）
     public Text scaleText;
-
+    bool loadflag;
+    public string loadname="localSelect";
     // デフォルトサイズ
     private float defaultScale;
 
@@ -17,6 +18,7 @@ public class PinchinPinchOut : MonoBehaviour {
         // 初期値取得
         RectTransform rt = this.GetComponent(typeof (RectTransform)) as RectTransform;
         defaultScale = rt.sizeDelta.x;
+        loadflag=false;
     }
 
     void Update () {
@@ -38,13 +40,25 @@ public class PinchinPinchOut : MonoBehaviour {
             } else if (touch1.phase == TouchPhase.Moved && touch2.phase == TouchPhase.Moved) {
                 // タッチ位置の移動後、長さを再測し、前回の距離からの相対値を取る。
                 float newDist = Vector2.Distance (touch1.position, touch2.position);
-                scale = defaultScale + (newDist - backDist) / 100.0f;
-                scaleText.text = "scalse = " + scale.ToString();
-
-                // 相対値が変更した場合、オブジェクトに相対値を反映させる
-                if(scale != 0) {
-                    UpdateScaling(scale);  
+                if(backDist<newDist){
+                    //ロード
+                    print("ピンチアウト");
+                    loadflag=true;
+                    return;
+                }else{
+                    print("ピンチイン");
+                    return;
                 }
+                // scale = defaultScale + (newDist - backDist) / 100.0f;
+                // scaleText.text = "scalse = " + scale.ToString();
+                // 相対値が変更した場合、オブジェクトに相対値を反映させる
+                // if(scale != 0) {
+                //     UpdateScaling(scale);  
+                // }
+            }
+            if(loadflag){
+                FadeManager.Instance.LoadLevel(loadname,2f);
+                return;
             }
         }
     }
