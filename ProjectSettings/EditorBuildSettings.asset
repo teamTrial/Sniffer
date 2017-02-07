@@ -4,4 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scene/Start.unity
+  - enabled: 1
+    path: Assets/Scene/globalSelect.unity
+  - enabled: 1
+    path: Assets/Scene/localSelect.unity
+  - enabled: 1
+    path: Assets/Scene/Stage1.unity
