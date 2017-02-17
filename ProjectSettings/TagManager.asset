@@ -8,6 +8,7 @@ TagManager:
   - camera
   - hand
   - stand
+  - enemy
   layers:
   - Default
   - TransparentFX

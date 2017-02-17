@@ -13,6 +13,7 @@ public class Actoin : MonoBehaviour {
         get;
         private set;
     }
+    float LongTap = 0;
     void Start () {
         anim = GetComponent<Animator> ();
         Attack ();
@@ -46,32 +47,36 @@ public class Actoin : MonoBehaviour {
     void LateUpdate () {
         checkAnim ();
     }
-    float hoge = 0;
+
     void CheckLongtap () {
 
         if (Input.touchCount > 0) {
             Touch touch = Input.GetTouch (0);
-            // print (hoge);
             if (!attackFlag) {
                 //タッチしている＆指が動いてない
                 if (touch.phase == TouchPhase.Stationary) {
-                    hoge += Time.deltaTime;
-                    // setAnimation(1);
+                    if (PlayerController.CenterFlag) {
+                        LongTap += Time.deltaTime;
+                        // setAnimation(1);
+                    }
                 }
                 //タッチしている＆指が動いている
                 else if (touch.phase == TouchPhase.Moved) {
-                    setAnimation (1);
-                    hoge += Time.deltaTime;
+                    if (PlayerController.CenterFlag) {
+                        setAnimation (1);
+                        LongTap += Time.deltaTime;
+                    }
                 }
             }
             //タッチしている指が離れた
             if (touch.phase == TouchPhase.Ended) {
                 if (PlayerController.CenterFlag) {
-                    if (hoge > 1.0f) {
+                    if (LongTap > 1.0f) {
                         print ("襲うアクション");
+                        setAnimation (3);
                     }
                 }
-                hoge = 0;
+                LongTap = 0;
                 if (anim.GetInteger ("Anim") < 2) {
                     setAnimation (0);
                 }
