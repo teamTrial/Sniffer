@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
@@ -15,16 +16,26 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     public static bool PlayerDirectoin { get; private set; }
     public static bool BattleFlag { get; private set; }
-     Vector2 dis;
+    public static bool attackFlag { get; private set; }
+    Vector2 dis;
+
+    public Button center;
+    float LongTap = 0;
+    Animator anim;
     void Start () {
+        center = GameObject.Find ("UI/center").GetComponent<Button> ();
+        Attack ();
         PlayerDirectoin = true;
-        CenterFlag=false;
+        CenterFlag = false;
+        anim = Player.GetComponent<Animator> ();
         GetDistancefromPovittoFinger ();
+
     }
-    public void EndBattle(){
-        BattleFlag=false;
+    public void EndBattle () {
+        BattleFlag = false;
     }
     /// <summary>
+    /// 移動処理
     /// 中心地から指の距離を毎フレーム算出する
     /// </summary>
     void GetDistancefromPovittoFinger () {
@@ -36,16 +47,16 @@ public class PlayerController : MonoBehaviour {
                 return FingerPos (Input.mousePosition);
             })
             .Subscribe (distance => {
-               dis = new Vector2 (distance.x - Center.x, 0);
+                dis = new Vector2 (distance.x - Center.x, 0);
                 //コントローラーのしきい値
                 if (!(-1.6f < dis.x && dis.x < 1.6f) && !Actoin.attackFlag) {
                     Direction (dis);
                     Player.transform.Translate (dis * Time.deltaTime);
-                    CenterFlag=false;
-                    EndBattle();
+                    CenterFlag = false;
+                    EndBattle ();
                     return;
-                }else if(-1.6f < dis.x && dis.x < 1.6f){
-                    CenterFlag=true;
+                } else if (-1.6f < dis.x && dis.x < 1.6f) {
+                    CenterFlag = true;
                 }
             });
     }
@@ -104,10 +115,82 @@ public class PlayerController : MonoBehaviour {
             Player.transform.localScale.z
         );
     }
-    public void StartBattle(){
-        this.UpdateAsObservable()
-        .TakeWhile(NotCentor=>CenterFlag)
-        .Subscribe(_=>print("ほげ"));
-        BattleFlag=true;
+    
+    public void StartBattle () {
+        this.UpdateAsObservable ()
+            .TakeWhile (NotCentor => CenterFlag)
+            .Subscribe (_ => print ("ほげ"));
+        BattleFlag = true;
+    }
+    void Attack () {
+        var doubleclick = center.onClick.AsObservable ();
+        doubleclick
+            .Where (attack => !PlayerController.BattleFlag)
+            // 0.2秒以内のメッセージをまとめる
+            .Buffer (doubleclick.Throttle (TimeSpan.FromMilliseconds (300)))
+            // タップ回数が2回以上だったら処理する
+            .Where (tap => tap.Count >= 2)
+            .Subscribe (tap => {
+                attackFlag = true;
+                setAnimation (3);
+            });
+
+        var longtap = this.UpdateAsObservable ();
+        longtap.TakeUntil (doubleclick).RepeatSafe ()
+            .Subscribe (_ => {
+                SnifferAction ();
+            });
+    }
+    void setAnimation (int animnum = 0) {
+        anim = Player.GetComponent<Animator> ();
+        anim.SetInteger ("Anim", animnum);
+    }
+    void SnifferAction () {
+
+        if (Input.touchCount > 0) {
+            Touch touch = Input.GetTouch (0);
+            if (!attackFlag) {
+                //タッチしている＆指が動いてない
+                if (touch.phase == TouchPhase.Stationary) {
+                    if (PlayerController.CenterFlag) {
+                        LongTap += Time.deltaTime;
+                        // setAnimation(1);
+                    }
+                }
+                //タッチしている＆指が動いている
+                else if (touch.phase == TouchPhase.Moved) {
+                    if (PlayerController.CenterFlag) {
+                        setAnimation (1);
+                        LongTap += Time.deltaTime;
+                    }
+                }
+            }
+            //タッチしている指が離れた
+            if (touch.phase == TouchPhase.Ended) {
+                if (PlayerController.CenterFlag) {
+                    if (LongTap > 1.0f) {
+                        print ("襲うアクション");
+                        setAnimation (3);
+                    }
+                }
+                LongTap = 0;
+                if (anim.GetInteger ("Anim") < 2) {
+                    setAnimation (0);
+                }
+            }
+        }
+    }
+    void LateUpdate () {
+        checkAnim ();
+    }
+    void checkAnim () {
+        AnimatorStateInfo animInfo = anim.GetCurrentAnimatorStateInfo (0);
+        if (1.0f < animInfo.normalizedTime) {
+            //アニメーションが止まると移動以外だった場合
+            if (1 < anim.GetInteger ("Anim")) {
+                setAnimation (0);
+                attackFlag = false;
+            }
+        }
     }
 }
