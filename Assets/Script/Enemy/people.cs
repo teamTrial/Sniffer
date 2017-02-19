@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class poeple : MonoBehaviour {
+public class people : MonoBehaviour {
     public class Count {
         public int limit;
         public float counter;
@@ -17,18 +17,20 @@ public class poeple : MonoBehaviour {
     public float speed = 1f;
     private InstanceEnemy Right, Left;
     private StageManager StageManager;
-    private bool Battleflag;
+    private Battle battle;
+    private PlayerController endbattle;
     void Start () {
-        Battleflag=false;
         count = new Count ();
         StageManager = GameObject.Find ("Manager").GetComponent<StageManager> ();
+        battle = GameObject.Find ("Manager").GetComponent<Battle> ();
+        endbattle= GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
         speed = speed * Random.Range (0.3f, 1.0f);
         Right = GameObject.Find ("CreatePeople_Right").GetComponent<InstanceEnemy> ();
         Left = GameObject.Find ("CreatePeople_Left").GetComponent<InstanceEnemy> ();
     }
 
     void Update () {
-        if (!Battleflag) {
+        if (!PlayerController.BattleFlag) {
             walk ();
             if (count.countdowsflag) {
                 count.counter += Time.deltaTime;
@@ -50,9 +52,9 @@ public class poeple : MonoBehaviour {
             // Destroy(this.gameObject);
             // StageManager.EnemyNum=StageManager.EnemyNum+1;
             // StageManager.UpdateNum();
-            print("当たった");
-            Battleflag=true;
-            GetComponent<Battle>().enabled=true;
+            print ("当たった");
+            // GetComponent<Battle>().enabled=true;
+           battle.StartBattle (this.gameObject);
         }
         if (other.tag == "stand") {
             print ("構えるモーション接触");
@@ -80,5 +82,6 @@ public class poeple : MonoBehaviour {
     void OnDestroy () {
         Right.enemyCounter--;
         Left.enemyCounter--;
+        endbattle.EndBattle();
     }
 }

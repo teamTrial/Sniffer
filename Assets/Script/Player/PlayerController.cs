@@ -14,10 +14,15 @@ public class PlayerController : MonoBehaviour {
     /// 右向きtrue;左向きfalse
     /// </summary>
     public static bool PlayerDirectoin { get; private set; }
+    public static bool BattleFlag { get; private set; }
+     Vector2 dis;
     void Start () {
         PlayerDirectoin = true;
         CenterFlag=false;
         GetDistancefromPovittoFinger ();
+    }
+    public void EndBattle(){
+        BattleFlag=false;
     }
     /// <summary>
     /// 中心地から指の距離を毎フレーム算出する
@@ -31,11 +36,14 @@ public class PlayerController : MonoBehaviour {
                 return FingerPos (Input.mousePosition);
             })
             .Subscribe (distance => {
-                Vector2 dis = new Vector2 (distance.x - Center.x, 0);
+               dis = new Vector2 (distance.x - Center.x, 0);
+                //コントローラーのしきい値
                 if (!(-1.6f < dis.x && dis.x < 1.6f) && !Actoin.attackFlag) {
                     Direction (dis);
                     Player.transform.Translate (dis * Time.deltaTime);
                     CenterFlag=false;
+                    EndBattle();
+                    return;
                 }else if(-1.6f < dis.x && dis.x < 1.6f){
                     CenterFlag=true;
                 }
@@ -95,5 +103,11 @@ public class PlayerController : MonoBehaviour {
             Player.transform.localScale.y,
             Player.transform.localScale.z
         );
+    }
+    public void StartBattle(){
+        this.UpdateAsObservable()
+        .TakeWhile(NotCentor=>CenterFlag)
+        .Subscribe(_=>print("ほげ"));
+        BattleFlag=true;
     }
 }

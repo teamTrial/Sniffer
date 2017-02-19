@@ -30,6 +30,7 @@ public class Actoin : MonoBehaviour {
 
         var doubleclick = center.onClick.AsObservable ();
         doubleclick
+            .Where (attack => !PlayerController.BattleFlag)
             // 0.2秒以内のメッセージをまとめる
             .Buffer (doubleclick.Throttle (TimeSpan.FromMilliseconds (300)))
             // タップ回数が2回以上だったら処理する
