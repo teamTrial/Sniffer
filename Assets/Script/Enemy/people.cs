@@ -23,7 +23,7 @@ public class people : MonoBehaviour {
         count = new Count ();
         StageManager = GameObject.Find ("Manager").GetComponent<StageManager> ();
         battle = GameObject.Find ("Manager").GetComponent<Battle> ();
-        endbattle= GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
+        endbattle = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
         speed = speed * Random.Range (0.3f, 1.0f);
         Right = GameObject.Find ("CreatePeople_Right").GetComponent<InstanceEnemy> ();
         Left = GameObject.Find ("CreatePeople_Left").GetComponent<InstanceEnemy> ();
@@ -55,7 +55,7 @@ public class people : MonoBehaviour {
             // StageManager.UpdateNum();
             print ("当たった");
             // GetComponent<Battle>().enabled=true;
-           battle.StartBattle (this.gameObject);
+                battle.StartBattle (this.gameObject);
         }
         if (other.tag == "stand") {
             print ("構えるモーション接触");
@@ -83,6 +83,5 @@ public class people : MonoBehaviour {
     void OnDestroy () {
         Right.enemyCounter--;
         Left.enemyCounter--;
-        endbattle.EndBattle();
     }
 }

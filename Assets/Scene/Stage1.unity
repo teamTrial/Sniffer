@@ -314,7 +314,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillAmount: 0.872
   m_FillClockwise: 0
   m_FillOrigin: 2
 --- !u!222 &189020897
@@ -542,6 +542,7 @@ GameObject:
   - component: {fileID: 506633759}
   - component: {fileID: 506633762}
   - component: {fileID: 506633763}
+  - component: {fileID: 506633764}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -612,6 +613,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18e0b73cf09fa245bf0f83195a15e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &506633764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 506633758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7efe8ece9d9ef499ccd4acedc380c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerHP: 10
 --- !u!1 &590274148
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,7 +928,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0
-  m_Text: New Text
+  m_Text: NPC
 --- !u!222 &701997362
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1127,7 +1140,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 2
 --- !u!222 &1133564696
