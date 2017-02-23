@@ -29,9 +29,9 @@ public class EnemyRay : MonoBehaviour {
         }
 
     }
-    public void Escape () {
+    public void Escape (float EscapeSpeed=2) {
         this.transform.localScale = new Vector2 (-this.transform.localScale.x, this.transform.localScale.y);
-        this.GetComponent<people> ().speed = 2;
+        this.GetComponent<people> ().speed = EscapeSpeed;
     }
     Vector2 Direction () {
         var dir = this.transform.localScale.x;

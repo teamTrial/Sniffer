@@ -482,7 +482,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 1929531507}
-  center: {fileID: 0}
 --- !u!114 &335748855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1013,6 +1012,11 @@ Prefab:
         type: 2}
       propertyPath: m_Color.b
       value: 0.1067258
+      objectReference: {fileID: 0}
+    - target: {fileID: 114151512961612248, guid: 95a09f404c57f4947a76047d0e3ad59f,
+        type: 2}
+      propertyPath: speed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 61051720841451088, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
@@ -1692,7 +1696,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1929531509}
   - component: {fileID: 1929531508}
-  - component: {fileID: 1929531510}
   - component: {fileID: 1929531511}
   - component: {fileID: 1929531512}
   - component: {fileID: 1929531513}
@@ -1753,18 +1756,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1929531510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1929531507}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dda278354c6420f42804c2bc5040080b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  center: {fileID: 300572053}
 --- !u!95 &1929531511
 Animator:
   serializedVersion: 3
@@ -1939,6 +1930,7 @@ GameObject:
   - component: {fileID: 2019237632}
   - component: {fileID: 2019237633}
   - component: {fileID: 2019237634}
+  - component: {fileID: 2019237635}
   m_Layer: 2
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2008,7 +2000,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2019237626}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.23, y: 1.65, z: 86.93}
+  m_LocalPosition: {x: -8.500002, y: 2, z: 86.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2069,3 +2061,20 @@ BoxCollider2D:
   m_Offset: {x: 0.03220129, y: -0.029855251}
   serializedVersion: 2
   m_Size: {x: 5.6148214, y: 9.992011}
+--- !u!95 &2019237635
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2019237626}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 08b68a348ccb9744fb6ed77ff6882e53, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1

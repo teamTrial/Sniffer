@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     public static bool attackFlag { get; private set; }
     Vector2 dis;
 
-    public Button center;
+    private Button center;
     float LongTap = 0;
     Animator anim;
     void Start () {
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour {
     public void StartBattle () {
         this.UpdateAsObservable ()
             .TakeWhile (NotCentor => CenterFlag)
-            .Subscribe (_ => print ("ほげ"));
+            .Subscribe (_ => print ("バトル開始!"));
         BattleFlag = true;
     }
     void Attack () {

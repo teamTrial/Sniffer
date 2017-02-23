@@ -38,7 +38,8 @@ public class Battle : MonoBehaviour {
         //元プレイヤーをNPCのAIを導入する
         Player.AddComponent<EnemyRay>();
         Player.AddComponent<people>();
-        
+        Player.GetComponent<EnemyRay>().Escape();
+
         Player.tag="enemy";
 
         
