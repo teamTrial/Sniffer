@@ -19,11 +19,15 @@ public class PlayerController : MonoBehaviour {
     public static bool attackFlag { get; private set; }
     Vector2 dis;
 
+    public float controllerThreshold=1.6f;
+
     private Button center;
     float LongTap = 0;
     Animator anim;
+    float OldCameraSize;
     void Start () {
         center = GameObject.Find ("UI/center").GetComponent<Button> ();
+        OldCameraSize=Camera.main.orthographicSize;
         Attack ();
         PlayerDirectoin = true;
         CenterFlag = false;
@@ -48,8 +52,9 @@ public class PlayerController : MonoBehaviour {
             })
             .Subscribe (distance => {
                 dis = new Vector2 (distance.x - Center.x, 0);
+                float NewCameraSize=Camera.main.orthographicSize;
                 //コントローラーのしきい値
-                if (!(-1.6f < dis.x && dis.x < 1.6f) && !Actoin.attackFlag) {
+                if (!(-controllerThreshold*(NewCameraSize/OldCameraSize) < dis.x && dis.x < controllerThreshold*(NewCameraSize/OldCameraSize)) && !Actoin.attackFlag) {
                     Direction (dis);
                     Player.transform.Translate (dis * Time.deltaTime);
                     CenterFlag = false;
