@@ -44,6 +44,7 @@ public class people : MonoBehaviour {
         if (other.tag == "MainCamera") {
             count.counter = 0;
             count.countdowsflag = false;
+            //snifferアクション時魂を表示する処理を記入
         }
         if (other.tag == "controller") return;
 
