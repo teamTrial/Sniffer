@@ -27,6 +27,7 @@ public class people : MonoBehaviour {
         speed = speed * Random.Range (0.3f, 1.0f);
         Right = GameObject.Find ("CreatePeople_Right").GetComponent<InstanceEnemy> ();
         Left = GameObject.Find ("CreatePeople_Left").GetComponent<InstanceEnemy> ();
+        
     }
 
     void Update () {

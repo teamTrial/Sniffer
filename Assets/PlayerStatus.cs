@@ -5,36 +5,48 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class PlayerStatus : MonoBehaviour {
-   public  Image HP_ui {
+    public Image HP_ui {
         get {
             return GameObject.Find ("UI/HP").GetComponent<Image> ();
         }
     }
-    public float PlayerHP = 10;
+    
+    Status Player=new Status();
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
-    void Start () { }
+    void Start () {
+        // Death ();
+    }
     /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.
     /// </summary>
     void Update () { }
-    public void Heel (int interval = 5) {
+    public void Heel (int interval = 20) {
         this.UpdateAsObservable ()
             .TakeWhile (NotCentor => !PlayerController.BattleFlag)
             .Delay (TimeSpan.FromSeconds (interval))
             .Subscribe (_ => {
                 HP_ui.fillAmount += 0.01f * Time.deltaTime;
-            }).AddTo(this.gameObject);
+
+            }).AddTo (this.gameObject);
     }
-	public void Damage(){
-		var random=UnityEngine.Random.Range(0.005f,0.02f);
-		HP_ui.fillAmount -= random;
-		PlayerHP-=random;
-	}
+    public void Death () {
+        this.UpdateAsObservable ()
+            .Where (HP => HP_ui.fillAmount == 0)
+            .First ()
+            .Subscribe (_ => {
+                print ("プレイヤー死亡");
+                // Destroy(GameObject.FindWithTag("Player"));
+            }).AddTo (this.gameObject);
+    }
+    public void Damage () {
+        var random = UnityEngine.Random.Range (0.005f, 0.02f);
+        HP_ui.fillAmount -= random;
+        Player.HP -= random;
+    }
 
 }

@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour {
             });
 
         var longtap = this.UpdateAsObservable ();
-        longtap.TakeUntil (doubleclick).RepeatSafe ()
+        longtap.RepeatSafe ()
             .Subscribe (_ => {
                 SnifferAction ();
             });
@@ -154,32 +154,14 @@ public class PlayerController : MonoBehaviour {
         anim.SetInteger ("Anim", animnum);
     }
     void SnifferAction () {
-
-        if (Input.touchCount > 0) {
-            Touch touch = Input.GetTouch (0);
-            if (!attackFlag) {
-                //タッチしている＆指が動いてない
-                if (touch.phase == TouchPhase.Stationary) {
-                    if (PlayerController.CenterFlag) {
-                        LongTap += Time.deltaTime;
-                        // setAnimation(1);
-                    }
-                }
-                //タッチしている＆指が動いている
-                else if (touch.phase == TouchPhase.Moved) {
-                    if (PlayerController.CenterFlag) {
-                        setAnimation (1);
-                        LongTap += Time.deltaTime;
-                    }
-                }
+        if (PlayerController.CenterFlag) {
+            if (Input.GetMouseButton (0)) {
+                LongTap += Time.deltaTime;
             }
-            //タッチしている指が離れた
-            if (touch.phase == TouchPhase.Ended) {
-                if (PlayerController.CenterFlag) {
-                    if (LongTap > 1.0f) {
-                        print ("襲うアクション");
-                        setAnimation (3);
-                    }
+            if (Input.GetMouseButtonUp (0)) {
+                if (LongTap > 1.0f) {
+                    print ("襲うアクション");
+                    setAnimation (3);
                 }
                 LongTap = 0;
                 if (anim.GetInteger ("Anim") < 2) {
@@ -187,6 +169,36 @@ public class PlayerController : MonoBehaviour {
                 }
             }
         }
+        // if (Input.touchCount > 0) {
+        //     print ("ああ");
+        //     Touch touch = Input.GetTouch (0);
+        //     if (!attackFlag) {
+        //         //タッチしている＆指が動いてない
+        //         if (touch.phase == TouchPhase.Stationary) {
+
+        //         }
+        //         //タッチしている＆指が動いている
+        //         else if (touch.phase == TouchPhase.Moved) {
+        //             if (PlayerController.CenterFlag) {
+        //                 setAnimation (1);
+        //                 LongTap += Time.deltaTime;
+        //             }
+        //         }
+        //     }
+        //     //タッチしている指が離れた
+        //     if (touch.phase == TouchPhase.Ended) {
+        //         if (PlayerController.CenterFlag) {
+        //             if (LongTap > 1.0f) {
+        //                 print ("襲うアクション");
+        //                 setAnimation (3);
+        //             }
+        //         }
+        //         LongTap = 0;
+        //         if (anim.GetInteger ("Anim") < 2) {
+        //             setAnimation (0);
+        //         }
+        //     }
+        // }
     }
     void LateUpdate () {
         checkAnim ();

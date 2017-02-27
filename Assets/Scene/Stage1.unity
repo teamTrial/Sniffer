@@ -314,7 +314,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.872
+  m_FillAmount: 0.042
   m_FillClockwise: 0
   m_FillOrigin: 2
 --- !u!222 &189020897
@@ -624,7 +624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e7efe8ece9d9ef499ccd4acedc380c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerHP: 10
 --- !u!1 &590274148
 GameObject:
   m_ObjectHideFlags: 0
