@@ -5,6 +5,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 public class PlayerController : MonoBehaviour {
 
@@ -17,6 +18,9 @@ public class PlayerController : MonoBehaviour {
     public static bool PlayerDirectoin { get; private set; }
     public static bool BattleFlag { get; private set; }
     public static bool attackFlag { get; private set; }
+    public static bool SnifferActionFlag { get; private set; }
+
+    private float SnifferActionTime = 5;
     Vector2 dis;
 
     public float controllerThreshold = 1.6f;
@@ -144,61 +148,45 @@ public class PlayerController : MonoBehaviour {
             });
 
         var longtap = this.UpdateAsObservable ();
-        longtap.RepeatSafe ()
+        longtap
+            .Where (Center => PlayerController.CenterFlag)
+            .Where (SnifferFlag => !SnifferActionFlag)
+            .Where (attack => !attackFlag)
             .Subscribe (_ => {
-                SnifferAction ();
+                if (Input.GetMouseButton (0)) {
+                    LongTap += Time.deltaTime;
+                }
+                if (Input.GetMouseButtonUp (0)) {
+                    if (LongTap > 1.0f) {
+                        print ("Snifferアクション");
+                        setAnimation (2);
+                        SnifferAction ();
+                    }
+                    LongTap = 0;
+                    if (anim.GetInteger ("Anim") < 2) {
+                        setAnimation (0);
+                    }
+                }
             });
     }
+    /// <summary>
+    /// アニメーションの設定
+    /// </summary>
+    /// <param name="animnum">0=止まる,1=歩く,2=sniff,3=attack</param>
     void setAnimation (int animnum = 0) {
         anim = Player.GetComponent<Animator> ();
         anim.SetInteger ("Anim", animnum);
     }
     void SnifferAction () {
-        if (PlayerController.CenterFlag) {
-            if (Input.GetMouseButton (0)) {
-                LongTap += Time.deltaTime;
-            }
-            if (Input.GetMouseButtonUp (0)) {
-                if (LongTap > 1.0f) {
-                    print ("襲うアクション");
-                    setAnimation (3);
-                }
-                LongTap = 0;
-                if (anim.GetInteger ("Anim") < 2) {
-                    setAnimation (0);
-                }
-            }
-        }
-        // if (Input.touchCount > 0) {
-        //     print ("ああ");
-        //     Touch touch = Input.GetTouch (0);
-        //     if (!attackFlag) {
-        //         //タッチしている＆指が動いてない
-        //         if (touch.phase == TouchPhase.Stationary) {
-
-        //         }
-        //         //タッチしている＆指が動いている
-        //         else if (touch.phase == TouchPhase.Moved) {
-        //             if (PlayerController.CenterFlag) {
-        //                 setAnimation (1);
-        //                 LongTap += Time.deltaTime;
-        //             }
-        //         }
-        //     }
-        //     //タッチしている指が離れた
-        //     if (touch.phase == TouchPhase.Ended) {
-        //         if (PlayerController.CenterFlag) {
-        //             if (LongTap > 1.0f) {
-        //                 print ("襲うアクション");
-        //                 setAnimation (3);
-        //             }
-        //         }
-        //         LongTap = 0;
-        //         if (anim.GetInteger ("Anim") < 2) {
-        //             setAnimation (0);
-        //         }
-        //     }
-        // }
+        SnifferActionFlag = true;
+        var MainCamera = GameObject.Find ("Main Camera").GetComponent<Grayscale> ();
+        MainCamera.enabled = true;
+        Observable.Timer (
+                TimeSpan.FromSeconds (SnifferActionTime))
+            .Subscribe (_ => {
+                SnifferActionFlag = false;
+                MainCamera.enabled = false;
+            });
     }
     void LateUpdate () {
         checkAnim ();

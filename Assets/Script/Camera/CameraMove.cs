@@ -35,7 +35,19 @@ public class CameraMove : MonoBehaviour {
         transform.parent = null;
         stageController = GetComponent<StageController> ();
     }
-
+    /// <summary>
+    /// Sent each frame where another object is within a trigger collider
+    /// attached to this object (2D physics only).
+    /// </summary>
+    /// <param name="other">The other Collider2D involved in this collision.</param>
+    void OnTriggerStay2D(Collider2D other)
+    {
+       if(PlayerController.SnifferActionFlag){
+           if(other.tag=="enemy"){
+               
+           }
+       }
+    }
     void Update () {
         DrawCamera ();
         if (PlayerController.BattleFlag) {

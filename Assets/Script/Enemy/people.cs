@@ -19,15 +19,17 @@ public class people : MonoBehaviour {
     private StageManager StageManager;
     private Battle battle;
     private PlayerController endbattle;
+    private SniffeUI sniffer;
     void Start () {
         count = new Count ();
+        sniffer = transform.FindChild ("HP").GetComponent<SniffeUI> ();
         StageManager = GameObject.Find ("Manager").GetComponent<StageManager> ();
         battle = GameObject.Find ("Manager").GetComponent<Battle> ();
         endbattle = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
         speed = speed * Random.Range (0.3f, 1.0f);
         Right = GameObject.Find ("CreatePeople_Right").GetComponent<InstanceEnemy> ();
         Left = GameObject.Find ("CreatePeople_Left").GetComponent<InstanceEnemy> ();
-        
+
     }
 
     void Update () {
@@ -45,8 +47,9 @@ public class people : MonoBehaviour {
         if (other.tag == "MainCamera") {
             count.counter = 0;
             count.countdowsflag = false;
-            //snifferアクション時魂を表示する処理を記入
+            sniffer.CheckSnifferActionFlag ();
         }
+        //snifferアクション時魂を表示する処理を記入
         if (other.tag == "controller") return;
 
         //至近距離でプレイヤーに接触した場合
@@ -56,7 +59,7 @@ public class people : MonoBehaviour {
             // StageManager.UpdateNum();
             print ("当たった");
             // GetComponent<Battle>().enabled=true;
-                battle.StartBattle (this.gameObject);
+            battle.StartBattle (this.gameObject);
         }
         if (other.tag == "stand") {
             print ("構えるモーション接触");
@@ -66,6 +69,7 @@ public class people : MonoBehaviour {
     void OnTriggerExit2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             count.countdowsflag = true;
+            sniffer.CheckSnifferActionFlag();
         }
     }
 

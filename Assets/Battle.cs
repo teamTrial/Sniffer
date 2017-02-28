@@ -34,6 +34,7 @@ public class Battle : MonoBehaviour {
         GameObject.Find ("Main Camera").GetComponent<CameraMove> ().target = NPC.transform;
         GameObject.Find ("UI/Controller").GetComponent<PlayerController> ().Player = NPC;
         NPC.tag = "controller";
+        NPC.layer=LayerMask.NameToLayer("Highlight");
         NPC.GetComponent<people> ().enabled = false;;
 
         // NPC.AddComponent<Actoin> ();
@@ -42,7 +43,7 @@ public class Battle : MonoBehaviour {
         Player.AddComponent<EnemyRay> ();
         Player.AddComponent<people> ();
         Player.GetComponent<EnemyRay> ().Escape ();
-
+        NPC.layer=LayerMask.NameToLayer("Default");
         Player.tag = "enemy";
         
 
