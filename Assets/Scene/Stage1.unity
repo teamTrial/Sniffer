@@ -314,7 +314,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.042
+  m_FillAmount: 1
   m_FillClockwise: 0
   m_FillOrigin: 2
 --- !u!222 &189020897
@@ -543,6 +543,7 @@ GameObject:
   - component: {fileID: 506633762}
   - component: {fileID: 506633763}
   - component: {fileID: 506633764}
+  - component: {fileID: 506633765}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -624,6 +625,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e7efe8ece9d9ef499ccd4acedc380c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &506633765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 506633758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb46b7bc41d5fc42b36a05a969be0f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Enemy: []
+  enemy: {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
+  Limit: 10
+  Counter: 0
 --- !u!1 &590274148
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,7 +730,6 @@ RectTransform:
   - {fileID: 300572052}
   - {fileID: 1575582485}
   - {fileID: 1133564693}
-  - {fileID: 701997359}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -846,99 +861,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 659774478}
---- !u!1 &701997358
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 701997359}
-  - component: {fileID: 701997362}
-  - component: {fileID: 701997361}
-  - component: {fileID: 701997360}
-  m_Layer: 5
-  m_Name: EnemyHP
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &701997359
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 701997358}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 590274152}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -280, y: 519.9673}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &701997360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 701997358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a37371ce78ba9e946a17686ee8cf5554, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTrans: {fileID: 1009191582}
-  offset: {x: 0, y: 1, z: 0}
---- !u!114 &701997361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 701997358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
-    m_MaxSize: 40
-    m_Alignment: 1
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 0
-  m_Text: NPC
---- !u!222 &701997362
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 701997358}
---- !u!4 &1009191582 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1160932486}
 --- !u!1 &1114750071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1104,7 +1026,7 @@ MonoBehaviour:
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 0
-  m_FillClockwise: 1
+  m_FillClockwise: 0
   m_FillOrigin: 2
 --- !u!222 &1133564696
 CanvasRenderer:
@@ -1155,9 +1077,10 @@ Prefab:
       propertyPath: m_LocalScale.x
       value: -0.4693472
       objectReference: {fileID: 0}
-    - target: {fileID: 1956175785565232, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
-      propertyPath: m_Layer
-      value: 8
+    - target: {fileID: 114151512961612248, guid: 95a09f404c57f4947a76047d0e3ad59f,
+        type: 2}
+      propertyPath: speed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
@@ -1291,31 +1214,16 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1297378627}
-  - component: {fileID: 1297378626}
   - component: {fileID: 1297378628}
   - component: {fileID: 1297378630}
   - component: {fileID: 1297378629}
   m_Layer: 0
-  m_Name: CreatePeople_Left
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1297378626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1297378625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cc26c9161d7f4b4e9bc86a7701e09b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemy: {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
-  enemyLimit: 5
-  enemyCounter: 0
 --- !u!4 &1297378627
 Transform:
   m_ObjectHideFlags: 0
@@ -2034,31 +1942,16 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 2004858638}
-  - component: {fileID: 2004858637}
   - component: {fileID: 2004858639}
   - component: {fileID: 2004858641}
   - component: {fileID: 2004858640}
   m_Layer: 0
-  m_Name: CreatePeople_Right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2004858637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2004858636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cc26c9161d7f4b4e9bc86a7701e09b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemy: {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
-  enemyLimit: 5
-  enemyCounter: 0
 --- !u!4 &2004858638
 Transform:
   m_ObjectHideFlags: 0

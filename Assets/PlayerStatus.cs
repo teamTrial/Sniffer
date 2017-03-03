@@ -11,16 +11,19 @@ public class PlayerStatus : MonoBehaviour {
             return GameObject.Find ("UI/HP").GetComponent<Image> ();
         }
     }
-    
-    Status Player=new Status();
+    public Image MP_ui {
+        get {
+            return GameObject.Find ("UI/MP").GetComponent<Image> ();
+        }
+    }
+
+    Status Player = new Status ("Player",15);
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
-    void Start () {
-        // Death ();
-    }
+    void Start () { }
     /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.
     /// </summary>
@@ -31,7 +34,7 @@ public class PlayerStatus : MonoBehaviour {
             .Delay (TimeSpan.FromSeconds (interval))
             .Subscribe (_ => {
                 HP_ui.fillAmount += 0.01f * Time.deltaTime;
-
+                MP_ui.fillAmount -= 0.005f * Time.deltaTime;
             }).AddTo (this.gameObject);
     }
     public void Death () {
@@ -46,7 +49,7 @@ public class PlayerStatus : MonoBehaviour {
     public void Damage () {
         var random = UnityEngine.Random.Range (0.005f, 0.02f);
         HP_ui.fillAmount -= random;
-        Player.HP -= random;
+        Player.HP -= random * Player.OldHP;
+        MP_ui.fillAmount += random;
     }
-
 }

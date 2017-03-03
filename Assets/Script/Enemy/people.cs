@@ -13,6 +13,9 @@ public class people : MonoBehaviour {
             counter = 0;
         }
     }
+    [SerializeField]
+    public int HP=10;
+
     Count count;
     public float speed = 1f;
     private InstanceEnemy Right, Left;
@@ -20,15 +23,22 @@ public class people : MonoBehaviour {
     private Battle battle;
     private PlayerController endbattle;
     private SniffeUI sniffer;
+    EnemyStatusDB　EnemyDB;
+    int NPCHP(){
+        return Random.Range(HP-5,HP+3);
+    }
     void Start () {
+        HP=NPCHP();        
+       EnemyDB= GameObject.Find ("Manager").GetComponent<EnemyStatusDB> ();
+       EnemyDB.EntryEnemy(this.gameObject.name,HP);
         count = new Count ();
         sniffer = transform.FindChild ("HP").GetComponent<SniffeUI> ();
         StageManager = GameObject.Find ("Manager").GetComponent<StageManager> ();
         battle = GameObject.Find ("Manager").GetComponent<Battle> ();
         endbattle = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
         speed = speed * Random.Range (0.3f, 1.0f);
-        Right = GameObject.Find ("CreatePeople_Right").GetComponent<InstanceEnemy> ();
-        Left = GameObject.Find ("CreatePeople_Left").GetComponent<InstanceEnemy> ();
+        // Right = GameObject.Find ("CreatePeople_Right").GetComponent<InstanceEnemy> ();
+        // Left = GameObject.Find ("CreatePeople_Left").GetComponent<InstanceEnemy> ();
 
     }
 
@@ -47,7 +57,6 @@ public class people : MonoBehaviour {
         if (other.tag == "MainCamera") {
             count.counter = 0;
             count.countdowsflag = false;
-            sniffer.CheckSnifferActionFlag ();
         }
         //snifferアクション時魂を表示する処理を記入
         if (other.tag == "controller") return;
@@ -69,24 +78,36 @@ public class people : MonoBehaviour {
     void OnTriggerExit2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             count.countdowsflag = true;
-            sniffer.CheckSnifferActionFlag();
         }
     }
 
-    void walk () {
+    void walk ()
+    {
         int direction = 1;
+        direction = NewMethod();
+        this.transform.Translate(direction * speed * Time.deltaTime, 0, 0);
+    }
+
+    private int NewMethod()
+    {
+        int direction;
         //左
-        if (this.transform.localScale.x < 0) {
+        if (this.transform.localScale.x < 0)
+        {
             direction = -1;
         }
         //右
-        else {
+        else
+        {
             direction = 1;
         }
-        this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
+
+        return direction;
     }
+
     void OnDestroy () {
-        Right.enemyCounter--;
-        Left.enemyCounter--;
+        EnemyDB.DeleteEnemy();
+        // Right.enemyCounter--;
+        // Left.enemyCounter--;
     }
 }

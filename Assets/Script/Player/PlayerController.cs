@@ -42,8 +42,10 @@ public class PlayerController : MonoBehaviour {
 
     }
     public void EndBattle () {
-        BattleFlag = false;
-        playerstatus.Heel (10);
+        if (BattleFlag) {
+            BattleFlag = false;
+            playerstatus.Heel (10);
+        }
     }
     /// <summary>
     /// 移動処理
