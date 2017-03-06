@@ -16,14 +16,12 @@ public class PlayerStatus : MonoBehaviour {
             return GameObject.Find ("UI/MP").GetComponent<Image> ();
         }
     }
-
+    GameObject cameraShake;
     Status Player = new Status ("Player",15);
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
-    void Start () { }
+    void Start () {
+        cameraShake=Camera.main.gameObject;
+     }
     /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.
     /// </summary>
@@ -43,10 +41,10 @@ public class PlayerStatus : MonoBehaviour {
             .First ()
             .Subscribe (_ => {
                 print ("プレイヤー死亡");
-                // Destroy(GameObject.FindWithTag("Player"));
             }).AddTo (this.gameObject);
     }
     public void Damage () {
+        iTween.ShakePosition(cameraShake,new Vector2(0.1f,0.1f),0.3f);
         var random = UnityEngine.Random.Range (0.005f, 0.02f);
         HP_ui.fillAmount -= random;
         Player.HP -= random * Player.OldHP;

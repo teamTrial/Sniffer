@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyRay))]
 public class people : MonoBehaviour {
     public class Count {
         public int limit;
@@ -13,24 +14,20 @@ public class people : MonoBehaviour {
             counter = 0;
         }
     }
-    [SerializeField]
-    public int HP=10;
-
+    public int HP;
     Count count;
     public float speed = 1f;
     private InstanceEnemy Right, Left;
     private StageManager StageManager;
     private Battle battle;
     private PlayerController endbattle;
-    private SniffeUI sniffer;
-    EnemyStatusDB　EnemyDB;
-    int NPCHP(){
-        return Random.Range(HP-5,HP+3);
+    protected SniffeUI sniffer;
+   protected EnemyStatusDB　 EnemyDB;
+   protected int NPCHP () {
+        return Random.Range (HP - 5, HP + 3);
     }
-    void Start () {
-        HP=NPCHP();        
-       EnemyDB= GameObject.Find ("Manager").GetComponent<EnemyStatusDB> ();
-       EnemyDB.EntryEnemy(this.gameObject.name,HP);
+    protected void Start () {
+        EnemyDB = EnemyStatusDB.Instance;
         count = new Count ();
         sniffer = transform.FindChild ("HP").GetComponent<SniffeUI> ();
         StageManager = GameObject.Find ("Manager").GetComponent<StageManager> ();
@@ -42,7 +39,7 @@ public class people : MonoBehaviour {
 
     }
 
-    void Update () {
+    protected void Update () {
         if (!PlayerController.BattleFlag) {
             walk ();
             if (count.countdowsflag) {
@@ -53,7 +50,7 @@ public class people : MonoBehaviour {
             }
         }
     }
-    void OnTriggerEnter2D (Collider2D other) {
+    protected void OnTriggerEnter2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             count.counter = 0;
             count.countdowsflag = false;
@@ -68,45 +65,41 @@ public class people : MonoBehaviour {
             // StageManager.UpdateNum();
             print ("当たった");
             // GetComponent<Battle>().enabled=true;
-            battle.StartBattle (this.gameObject);
+            battle.StartBattle (this.gameObject, HP);
         }
         if (other.tag == "stand") {
             print ("構えるモーション接触");
         }
     }
     //見えなくなったら
-    void OnTriggerExit2D (Collider2D other) {
+    protected void OnTriggerExit2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             count.countdowsflag = true;
         }
     }
 
-    void walk ()
-    {
+    void walk () {
         int direction = 1;
-        direction = NewMethod();
-        this.transform.Translate(direction * speed * Time.deltaTime, 0, 0);
+        direction = NewMethod ();
+        this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
     }
 
-    private int NewMethod()
-    {
+    private int NewMethod () {
         int direction;
         //左
-        if (this.transform.localScale.x < 0)
-        {
+        if (this.transform.localScale.x < 0) {
             direction = -1;
         }
         //右
-        else
-        {
+        else {
             direction = 1;
         }
 
         return direction;
     }
 
-    void OnDestroy () {
-        EnemyDB.DeleteEnemy();
+    protected void OnDestroy () {
+        EnemyDB.DeleteEnemy (this.name);
         // Right.enemyCounter--;
         // Left.enemyCounter--;
     }

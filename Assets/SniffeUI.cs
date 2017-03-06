@@ -5,6 +5,8 @@ using UnityEngine;
 public class SniffeUI : MonoBehaviour {
 	SpriteRenderer UI;
 	Transform parent;
+	Vector3 DefSize;
+	int MaxHP,afterHP;
 	/// <summary>
 	/// Start is called on the frame when a script is enabled just before
 	/// any of the Update methods is called the first time.
@@ -13,6 +15,7 @@ public class SniffeUI : MonoBehaviour {
 	{
 		UI=this.GetComponent<SpriteRenderer>();
 		parent=transform.parent.transform;
+		DefSize=this.transform.position;
 	}
 	/// <summary>
 	/// Update is called every frame, if the MonoBehaviour is enabled.

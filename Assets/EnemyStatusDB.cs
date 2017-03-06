@@ -3,18 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
-public class EnemyStatusDB : MonoBehaviour {
-    public List<Status> Enemy = new List<Status> ();
+public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
+    // public List<Status> Enemy = new List<Status> ();
+    public Dictionary<string,float> Enemy=new Dictionary<string,float>();
+    public int normalPeople=10;
+    public int police;
     public GameObject enemy;
     public int Limit = 10;
     public int Counter;
     Transform pos;
     Transform rightpos, leftpos;
+	int NameCounter;
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
     void Start () {
+		NameCounter=1;
 		rightpos=GameObject.Find("Right").transform;
 		leftpos=GameObject.Find("Left").transform;
         Counter = 0;
@@ -25,9 +30,10 @@ public class EnemyStatusDB : MonoBehaviour {
             }).AddTo (this.gameObject);
     }
     public void EntryEnemy (String EnemyName, float HP) {
-        Enemy.Add (new Status (EnemyName, HP));
+        Enemy.Add (EnemyName,HP);
     }
-	public void DeleteEnemy(){
+	public void DeleteEnemy(String EnemyName){
+		Enemy.Remove(EnemyName);
 		Counter--;
 	}
     void Instance (float randompos) {
@@ -37,6 +43,8 @@ public class EnemyStatusDB : MonoBehaviour {
             pos = leftpos;
         }
         var ins = Instantiate (enemy, pos).gameObject;
+		NameCounter++;
+		ins.name=enemy.name+NameCounter;
         if (GameObject.Find ("Main Camera").transform.position.x < pos.position.x) {
             //左向き左移動
             ins.transform.position = new Vector3 (pos.transform.position.x + (-randompos), pos.transform.position.y, pos.transform.position.z);

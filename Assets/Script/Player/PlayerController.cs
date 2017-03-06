@@ -38,13 +38,17 @@ public class PlayerController : MonoBehaviour {
         PlayerDirectoin = true;
         CenterFlag = false;
         anim = Player.GetComponent<Animator> ();
+        #if UNITY_EDITOR
+        SnifferActionTime=100;
+        SnifferAction();
+        #endif
         GetDistancefromPovittoFinger ();
 
     }
-    public void EndBattle () {
+    public void EndBattle (int cooltime=20) {
         if (BattleFlag) {
             BattleFlag = false;
-            playerstatus.Heel (10);
+            playerstatus.Heel (cooltime);
         }
     }
     /// <summary>
@@ -179,6 +183,9 @@ public class PlayerController : MonoBehaviour {
         anim = Player.GetComponent<Animator> ();
         anim.SetInteger ("Anim", animnum);
     }
+    /// <summary>
+    /// 敵の状態を可視化できるようにする
+    /// </summary>
     void SnifferAction () {
         SnifferActionFlag = true;
         var MainCamera = GameObject.Find ("Main Camera").GetComponent<Grayscale> ();
