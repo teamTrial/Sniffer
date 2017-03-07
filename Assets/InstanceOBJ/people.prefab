@@ -21,11 +21,11 @@ GameObject:
   - component: {fileID: 4075990031729778}
   - component: {fileID: 212532095788510732}
   - component: {fileID: 114638080096735182}
-  - component: {fileID: 114151512961612248}
   - component: {fileID: 50236687127480496}
   - component: {fileID: 114074350119586434}
   - component: {fileID: 70379501510374742}
   - component: {fileID: 95392562024583352}
+  - component: {fileID: 114982144833785162}
   m_Layer: 0
   m_Name: people
   m_TagString: enemy
@@ -141,19 +141,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDistance: 2
   height: 0.5
---- !u!114 &114151512961612248
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1596776687896712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 194b8903661039342ad63f305f108e1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 10
-  speed: 1
 --- !u!114 &114324222217695334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -178,6 +165,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerName: Default
   orderInLayer: 0
+--- !u!114 &114982144833785162
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596776687896712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43645c2fad77ffe48805bd984b3cb9c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 10
+  speed: 0
 --- !u!212 &212091270144843194
 SpriteRenderer:
   m_ObjectHideFlags: 1

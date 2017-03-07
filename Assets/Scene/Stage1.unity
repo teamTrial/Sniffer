@@ -637,8 +637,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb46b7bc41d5fc42b36a05a969be0f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enemy: []
+  EnemyVisible: []
   normalPeople: 10
+  police: 0
   enemy: {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
   Limit: 10
   Counter: 0
@@ -1036,24 +1037,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1133564692}
---- !u!1 &1138668598 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1160932486}
---- !u!114 &1138668599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1138668598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43645c2fad77ffe48805bd984b3cb9c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 10
-  speed: 0
 --- !u!1001 &1160932486
 Prefab:
   m_ObjectHideFlags: 0
@@ -1093,17 +1076,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 212091270144843194, guid: 95a09f404c57f4947a76047d0e3ad59f,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalScale.x
       value: -0.4693472
       objectReference: {fileID: 0}
-    - target: {fileID: 114151512961612248, guid: 95a09f404c57f4947a76047d0e3ad59f,
-        type: 2}
-      propertyPath: speed
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114151512961612248, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1206820806

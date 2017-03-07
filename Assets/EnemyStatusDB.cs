@@ -4,24 +4,29 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
-    // public List<Status> Enemy = new List<Status> ();
-    public Dictionary<string,float> Enemy=new Dictionary<string,float>();
-    public int normalPeople=10;
+#if UNITY_EDITOR
+    public List<Status> EnemyVisible = new List<Status> ();
+#endif
+    public Dictionary < string,
+    float > Enemy = new Dictionary < string,
+    float > ();
+    public int normalPeople = 10;
     public int police;
     public GameObject enemy;
     public int Limit = 10;
     public int Counter;
     Transform pos;
-    Transform rightpos, leftpos;
-	int NameCounter;
+    Transform rightpos,
+    leftpos;
+    int NameCounter;
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
     void Start () {
-		NameCounter=1;
-		rightpos=GameObject.Find("Right").transform;
-		leftpos=GameObject.Find("Left").transform;
+        NameCounter = 1;
+        rightpos = GameObject.Find ("Right").transform;
+        leftpos = GameObject.Find ("Left").transform;
         Counter = 0;
         Observable.Timer (TimeSpan.FromSeconds (5), TimeSpan.FromSeconds (2))
             .Where (_ => 0 <= Counter && Counter < Limit)
@@ -30,12 +35,18 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
             }).AddTo (this.gameObject);
     }
     public void EntryEnemy (String EnemyName, float HP) {
-        Enemy.Add (EnemyName,HP);
+        Enemy.Add (EnemyName, HP);
+#if UNITY_EDITOR
+        EnemyVisible.Add (new Status (EnemyName, Enemy[EnemyName]));
+#endif
     }
-	public void DeleteEnemy(String EnemyName){
-		Enemy.Remove(EnemyName);
-		Counter--;
-	}
+    public void DeleteEnemy (String EnemyName) {
+#if UNITY_EDITOR
+        EnemyVisible.Remove (new Status (EnemyName, Enemy[EnemyName]));
+#endif
+        Enemy.Remove (EnemyName);
+        Counter--;
+    }
     void Instance (float randompos) {
         if ((Counter % 2) == 0) {
             pos = rightpos;
@@ -43,8 +54,8 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
             pos = leftpos;
         }
         var ins = Instantiate (enemy, pos).gameObject;
-		NameCounter++;
-		ins.name=enemy.name+NameCounter;
+        NameCounter++;
+        ins.name = enemy.name + NameCounter;
         if (GameObject.Find ("Main Camera").transform.position.x < pos.position.x) {
             //左向き左移動
             ins.transform.position = new Vector3 (pos.transform.position.x + (-randompos), pos.transform.position.y, pos.transform.position.z);

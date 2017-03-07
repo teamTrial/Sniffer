@@ -23,7 +23,7 @@ public class Battle : MonoBehaviour {
             .Select (_ => 1)
             .TakeWhile (NotCentor => PlayerController.BattleFlag)
             .Scan ((sum, addCount) => sum + addCount)
-            .Do (totalCount => playerstatus.Damage ())
+            .Do (totalCount => playerstatus.Damage (NPC.name,HP-totalCount))
             .Where (totalCount => HP < totalCount)
             .Subscribe (totalCount => {
                 var Player = GameObject.FindGameObjectWithTag ("Player");
@@ -32,6 +32,7 @@ public class Battle : MonoBehaviour {
         //ズームの時間を取得
        AnimatorStateInfo cameraAnim = Camera.main.GetComponent<Animator> ().GetCurrentAnimatorStateInfo (0);
         CameraAnimationTime = cameraAnim.length + 2;
+        //タイムアップが来たら
         Observable.Timer (TimeSpan.FromSeconds (CameraAnimationTime)).Subscribe (_ => {
             playercontroller.EndBattle ();
         });
@@ -48,6 +49,7 @@ public class Battle : MonoBehaviour {
         // NPC.AddComponent<Actoin> ();
 
         //元プレイヤーをNPCのAIを導入する
+        //3/7 プレイヤーのジャンルに分けてAddComponentするコードを変更した方がよい
         Player.AddComponent<people> ();
         Player.GetComponent<EnemyRay> ().Escape ();
         NPC.layer = LayerMask.NameToLayer ("Default");

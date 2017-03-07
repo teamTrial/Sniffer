@@ -6,7 +6,7 @@ public class SniffeUI : MonoBehaviour {
 	SpriteRenderer UI;
 	Transform parent;
 	Vector3 DefSize;
-	int MaxHP,afterHP;
+	float MaxHP,afterHP;
 	/// <summary>
 	/// Start is called on the frame when a script is enabled just before
 	/// any of the Update methods is called the first time.
@@ -15,7 +15,8 @@ public class SniffeUI : MonoBehaviour {
 	{
 		UI=this.GetComponent<SpriteRenderer>();
 		parent=transform.parent.transform;
-		DefSize=this.transform.position;
+		DefSize=this.transform.localScale;
+		MaxHP=(int)EnemyStatusDB.Instance.Enemy[parent.name];
 	}
 	/// <summary>
 	/// Update is called every frame, if the MonoBehaviour is enabled.
@@ -24,6 +25,7 @@ public class SniffeUI : MonoBehaviour {
 	{
 		CheckSnifferActionFlag();
 		CheckDir();
+		ChangeSize();
 	}
     public void CheckSnifferActionFlag () {
 		this.transform.position=parent.position+(Vector3.up*0.15f);
@@ -40,5 +42,12 @@ public class SniffeUI : MonoBehaviour {
 		}else{
 			UI.flipX=false;
 		}
+	}
+	/// <summary>
+	/// 親オブジェクトの残りHPに応じてサイズを変更する
+	/// </summary>
+	void ChangeSize(){
+		afterHP=EnemyStatusDB.Instance.Enemy[parent.name];
+		this.transform.localScale=DefSize*(afterHP/MaxHP);
 	}
 }
