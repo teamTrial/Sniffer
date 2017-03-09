@@ -46,7 +46,6 @@ public class PlayerStatus : MonoBehaviour {
     public void Damage (String EnemyName,int EnemyHP) {
         iTween.ShakePosition(cameraShake,new Vector2(0.1f,0.1f),0.3f);
         var random = UnityEngine.Random.Range (0.005f, 0.02f);
-        print(EnemyName+" "+EnemyHP);
         EnemyStatusDB.Instance.Enemy[EnemyName]=EnemyHP;
         HP_ui.fillAmount -= random;
         Player.HP -= random * Player.OldHP;

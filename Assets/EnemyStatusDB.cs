@@ -7,9 +7,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
 #if UNITY_EDITOR
     public List<Status> EnemyVisible = new List<Status> ();
 #endif
-    public Dictionary < string,
-    float > Enemy = new Dictionary < string,
-    float > ();
+    public Dictionary < string,float > Enemy = new Dictionary < string,float > ();
     public int normalPeople = 10;
     public int police;
     public GameObject enemy;
@@ -31,7 +29,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
         Observable.Timer (TimeSpan.FromSeconds (5), TimeSpan.FromSeconds (2))
             .Where (_ => 0 <= Counter && Counter < Limit)
             .Subscribe (_ => {
-                Instance (UnityEngine.Random.Range (-5.5f, 0.5f));
+                InstanceEnemy (UnityEngine.Random.Range (-5.5f, 0.5f));
             }).AddTo (this.gameObject);
     }
     public void EntryEnemy (String EnemyName, float HP) {
@@ -47,7 +45,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
         Enemy.Remove (EnemyName);
         Counter--;
     }
-    void Instance (float randompos) {
+    void InstanceEnemy (float randompos) {
         if ((Counter % 2) == 0) {
             pos = rightpos;
         } else {

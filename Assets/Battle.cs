@@ -16,6 +16,7 @@ public class Battle : MonoBehaviour {
         playerstatus = GetComponent<PlayerStatus> ();
     }
     public void StartBattle (GameObject NPC, int HP = 10) {
+        int EnemyHP=HP;
         // タップダウンストリームを作成
         var tapDownStream = this.UpdateAsObservable ()
             .Where (_ => Input.GetMouseButtonDown (0));
@@ -23,7 +24,10 @@ public class Battle : MonoBehaviour {
             .Select (_ => 1)
             .TakeWhile (NotCentor => PlayerController.BattleFlag)
             .Scan ((sum, addCount) => sum + addCount)
-            .Do (totalCount => playerstatus.Damage (NPC.name,HP-totalCount))
+            .Do (totalCount => {
+                EnemyHP=HP-totalCount+1;
+                playerstatus.Damage (NPC.name,EnemyHP);
+                })
             .Where (totalCount => HP < totalCount)
             .Subscribe (totalCount => {
                 var Player = GameObject.FindGameObjectWithTag ("Player");
@@ -34,7 +38,10 @@ public class Battle : MonoBehaviour {
         CameraAnimationTime = cameraAnim.length + 2;
         //タイムアップが来たら
         Observable.Timer (TimeSpan.FromSeconds (CameraAnimationTime)).Subscribe (_ => {
+            EnemyStatusDB.Instance.Enemy[NPC.name]=EnemyHP;
             playercontroller.EndBattle ();
+            NPC.GetComponent<people>().HP=EnemyHP;
+            NPC.transform.FindChild("HP").GetComponent<SniffeUI>().UpdateSize();
         });
     }
     void ChangeController (GameObject NPC, GameObject Player) {
@@ -42,18 +49,17 @@ public class Battle : MonoBehaviour {
         //カメラワークと操作権をNPCに移す
         GameObject.Find ("Main Camera").GetComponent<CameraMove> ().target = NPC.transform;
         GameObject.Find ("UI/Controller").GetComponent<PlayerController> ().Player = NPC;
-        NPC.tag = "controller";
+        NPC.tag = "Player";
         NPC.layer = LayerMask.NameToLayer ("Highlight");
-        NPC.GetComponent<people> ().enabled = false;;
+        NPC.GetComponent<people> ().enabled = false;
 
         // NPC.AddComponent<Actoin> ();
 
         //元プレイヤーをNPCのAIを導入する
-        //3/7 プレイヤーのジャンルに分けてAddComponentするコードを変更した方がよい
-        Player.AddComponent<people> ();
+        //　追記3/7 プレイヤーのジャンルに分けてAddComponentするコードを変更した方がよい
+        Player.GetComponent<people>().enabled=true;
         Player.GetComponent<EnemyRay> ().Escape ();
-        NPC.layer = LayerMask.NameToLayer ("Default");
+        Player.layer = LayerMask.NameToLayer ("Default");
         Player.tag = "enemy";
-
     }
 }

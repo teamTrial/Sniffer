@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyRay))]
+[RequireComponent (typeof (EnemyRay))]
 public class people : MonoBehaviour {
     public class Count {
         public int limit;
@@ -22,12 +22,21 @@ public class people : MonoBehaviour {
     private Battle battle;
     private PlayerController endbattle;
     protected SniffeUI sniffer;
-   protected EnemyStatusDB　 EnemyDB;
-   protected int NPCHP () {
+    protected EnemyStatusDB　 EnemyDB;
+    public enum _EnemyType {
+        people,
+        JK,
+        police
+    }
+    protected int NPCHP () {
         return Random.Range (HP - 5, HP + 3);
     }
+
     protected void Start () {
         EnemyDB = EnemyStatusDB.Instance;
+        if(this.tag=="Player"){
+            this.GetComponent<people>().enabled=false;
+        }
         count = new Count ();
         sniffer = transform.FindChild ("HP").GetComponent<SniffeUI> ();
         StageManager = GameObject.Find ("Manager").GetComponent<StageManager> ();
@@ -35,7 +44,19 @@ public class people : MonoBehaviour {
         endbattle = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
         speed = speed * Random.Range (0.3f, 1.0f);
     }
+    // protected void SetStatus (_EnemyType EnemyType) {
+    //     EnemyDB = EnemyStatusDB.Instance;
 
+    //     if (EnemyType == _EnemyType.people) {
+    //         HP = EnemyDB.normalPeople;
+    //     } else if (EnemyType == _EnemyType.JK) {
+
+    //     } else if (EnemyType == _EnemyType.police) {
+
+    //     }
+    //     HP = NPCHP ();
+    //     EnemyDB.EntryEnemy (this.gameObject.name, HP);
+    // }
     protected void Update () {
         if (!PlayerController.BattleFlag) {
             walk ();
@@ -43,6 +64,7 @@ public class people : MonoBehaviour {
                 count.counter += Time.deltaTime;
             }
             if (count.limit < count.counter) {
+                EnemyDB.DeleteEnemy (this.name);
                 Destroy (this.gameObject);
             }
         }
@@ -77,11 +99,11 @@ public class people : MonoBehaviour {
 
     void walk () {
         int direction = 1;
-        direction = NewMethod ();
+        direction = Dir ();
         this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
     }
 
-    private int NewMethod () {
+    private int Dir () {
         int direction;
         //左
         if (this.transform.localScale.x < 0) {
@@ -93,11 +115,5 @@ public class people : MonoBehaviour {
         }
 
         return direction;
-    }
-
-    protected void OnDestroy () {
-        EnemyDB.DeleteEnemy (this.name);
-        // Right.enemyCounter--;
-        // Left.enemyCounter--;
     }
 }

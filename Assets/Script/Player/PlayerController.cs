@@ -201,6 +201,7 @@ public class PlayerController : MonoBehaviour {
         checkAnim ();
     }
     void checkAnim () {
+        anim = Player.GetComponent<Animator> ();
         AnimatorStateInfo animInfo = anim.GetCurrentAnimatorStateInfo (0);
         if (1.0f < animInfo.normalizedTime) {
             //アニメーションが止まると移動以外だった場合
