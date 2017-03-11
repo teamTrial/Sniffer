@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof (EnemyRay))]
 public class people : MonoBehaviour {
     public class Count {
         public int limit;
@@ -15,7 +14,7 @@ public class people : MonoBehaviour {
         }
     }
     public int HP;
-    Count count;
+    protected Count count;
     public float speed = 1f;
     private InstanceEnemy Right, Left;
     private StageManager StageManager;
@@ -23,19 +22,19 @@ public class people : MonoBehaviour {
     private PlayerController endbattle;
     protected SniffeUI sniffer;
     protected EnemyStatusDB　 EnemyDB;
-    public enum _EnemyType {
-        people,
-        JK,
-        police
-    }
+
+    [HeaderAttribute ("見える範囲")]
+    public float maxDistance = 3;
+    [HeaderAttribute ("目線")]
+    public float height = 0.5f;
     protected int NPCHP () {
         return Random.Range (HP - 5, HP + 3);
     }
 
     protected void Start () {
         EnemyDB = EnemyStatusDB.Instance;
-        if(this.tag=="Player"){
-            this.GetComponent<people>().enabled=false;
+        if (this.tag == "Player") {
+            this.GetComponent<people> ().enabled = false;
         }
         count = new Count ();
         sniffer = transform.FindChild ("HP").GetComponent<SniffeUI> ();
@@ -44,22 +43,9 @@ public class people : MonoBehaviour {
         endbattle = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
         speed = speed * Random.Range (0.3f, 1.0f);
     }
-    // protected void SetStatus (_EnemyType EnemyType) {
-    //     EnemyDB = EnemyStatusDB.Instance;
-
-    //     if (EnemyType == _EnemyType.people) {
-    //         HP = EnemyDB.normalPeople;
-    //     } else if (EnemyType == _EnemyType.JK) {
-
-    //     } else if (EnemyType == _EnemyType.police) {
-
-    //     }
-    //     HP = NPCHP ();
-    //     EnemyDB.EntryEnemy (this.gameObject.name, HP);
-    // }
     protected void Update () {
         if (!PlayerController.BattleFlag) {
-            walk ();
+            Walk ();
             if (count.countdowsflag) {
                 count.counter += Time.deltaTime;
             }
@@ -71,6 +57,7 @@ public class people : MonoBehaviour {
     }
     protected void OnTriggerEnter2D (Collider2D other) {
         if (other.tag == "MainCamera") {
+            EyeLine (other);
             count.counter = 0;
             count.countdowsflag = false;
         }
@@ -97,13 +84,13 @@ public class people : MonoBehaviour {
         }
     }
 
-    void walk () {
+    protected void Walk () {
         int direction = 1;
         direction = Dir ();
         this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
     }
 
-    private int Dir () {
+    protected int Dir () {
         int direction;
         //左
         if (this.transform.localScale.x < 0) {
@@ -115,5 +102,40 @@ public class people : MonoBehaviour {
         }
 
         return direction;
+    }
+    /// <summary>
+    /// NPCの視線
+    /// </summary>
+    public void EyeLine (Collider2D other) {
+        //レイヤーマスク作成
+
+        RaycastHit2D hit = HitObj ();
+        //なにかと衝突した時だけそのオブジェクトの名前をログに出す
+        if (hit.collider) {
+            if (hit.collider.tag == "hand") {
+                Escape ();
+            }
+        }
+    }
+    protected RaycastHit2D HitObj () {
+        //Rayの長さ
+        Vector2 dir = RayDirection ();
+        Vector2 pos = new Vector2 (transform.position.x + (dir.x * 0.5f), transform.position.y + height);
+        RaycastHit2D hit = Physics2D.Raycast (pos, dir, maxDistance);
+#if UNITY_EDITOR
+        Debug.DrawRay (pos, dir * maxDistance, Color.green);
+#endif
+        return hit;
+    }
+    Vector2 RayDirection () {
+        var dir = this.transform.localScale.x;
+        if (dir < 0) {
+            return Vector2.left;
+        }
+        return Vector2.right;
+    }
+    public void Escape (float EscapeSpeed = 2) {
+        this.transform.localScale = new Vector2 (-this.transform.localScale.x, this.transform.localScale.y);
+        this.GetComponent<people> ().speed = EscapeSpeed;
     }
 }

@@ -42,8 +42,8 @@ public class SniffeUI : MonoBehaviour {
             UI.enabled = false;
         }
     }
-    public void UpdateSize(){
-        DefSize=this.transform.localScale;
+    public void UpdateSize () {
+        DefSize = this.transform.localScale;
     }
     void CheckDir () {
         var Parent = transform.parent;

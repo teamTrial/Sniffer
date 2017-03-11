@@ -38,14 +38,14 @@ public class PlayerController : MonoBehaviour {
         PlayerDirectoin = true;
         CenterFlag = false;
         anim = Player.GetComponent<Animator> ();
-        #if UNITY_EDITOR
-        SnifferActionTime=100;
-        SnifferAction();
-        #endif
+#if UNITY_EDITOR
+        // SnifferActionTime=100;
+        // SnifferAction();
+#endif
         GetDistancefromPovittoFinger ();
 
     }
-    public void EndBattle (int cooltime=20) {
+    public void EndBattle (int cooltime = 20) {
         if (BattleFlag) {
             BattleFlag = false;
             playerstatus.Heel (cooltime);
@@ -69,12 +69,13 @@ public class PlayerController : MonoBehaviour {
                 //コントローラーのしきい値
                 if (!(-controllerThreshold * (NewCameraSize / OldCameraSize) < dis.x && dis.x < controllerThreshold * (NewCameraSize / OldCameraSize)) && !Actoin.attackFlag) {
                     Direction (dis);
-                    Player.transform.Translate (dis * Time.deltaTime);
+                    Walk (dis * Time.deltaTime);
                     CenterFlag = false;
                     EndBattle ();
                     return;
                 } else if (-1.6f < dis.x && dis.x < 1.6f) {
                     CenterFlag = true;
+                    setAnimation (0);
                 }
             });
     }
@@ -133,12 +134,24 @@ public class PlayerController : MonoBehaviour {
             Player.transform.localScale.z
         );
     }
-
+    /// <summary>
+    /// Update is called every frame, if the MonoBehaviour is enabled.
+    /// </summary>
+    void Update()
+    {
+        if(Input.GetMouseButtonUp (0)){
+            setAnimation(0);
+        }
+    }
     public void StartBattle () {
         this.UpdateAsObservable ()
             .TakeWhile (NotCentor => CenterFlag)
             .Subscribe (_ => print ("バトル開始!"));
         BattleFlag = true;
+    }
+    void Walk (Vector3 walk) {
+        Player.transform.Translate (walk);
+        setAnimation (1);
     }
     void Attack () {
         var doubleclick = center.onClick.AsObservable ();

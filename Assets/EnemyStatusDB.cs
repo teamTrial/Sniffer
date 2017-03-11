@@ -9,6 +9,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
 #endif
     public Dictionary < string,float > Enemy = new Dictionary < string,float > ();
     public int normalPeople = 10;
+    public int Police=100;
     public int police;
     public GameObject enemy;
     public int Limit = 10;
