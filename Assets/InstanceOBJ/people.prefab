@@ -102,7 +102,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1596776687896712}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.946, y: 0.261, z: 90}
+  m_LocalPosition: {x: -9.503, y: 0.261, z: 90}
   m_LocalScale: {x: 0.4693472, y: 0.4348854, z: 1}
   m_Children:
   - {fileID: 4634179466220056}
@@ -118,8 +118,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1503040056728824}
   m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2259822, y: 0.39967868, z: 0.099998474}
-  m_LocalScale: {x: -0.100906104, y: 1.264241, z: 1}
+  m_LocalPosition: {x: 0.085, y: 0.31, z: 0.099998474}
+  m_LocalScale: {x: 0.1009088, y: 1.264231, z: 1}
   m_Children: []
   m_Father: {fileID: 4075990031729778}
   m_RootOrder: 1
@@ -182,9 +182,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: -1.4399961, y: 0.000000059604645}
+  m_Offset: {x: 9.53213, y: -0.2694582}
   serializedVersion: 2
-  m_Size: {x: 2.8799999, y: 0.56}
+  m_Size: {x: 6.152326, y: 1.098917}
 --- !u!70 &70379501510374742
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
@@ -264,12 +264,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPCColor: NULL
   HP: 10
-  speed: 2
+  Enemytag: 
   maxDistance: 2
   height: 0.5
   PlayerMask:
     serializedVersion: 2
     m_Bits: 256
+  speed: 2
 --- !u!212 &212091270144843194
 SpriteRenderer:
   m_ObjectHideFlags: 1
