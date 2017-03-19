@@ -17,7 +17,19 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
     Transform pos;
     Transform rightpos;
     Transform leftpos;
-    public int WaveLv=0;
+    private int _wavelv;
+    public int WaveLv{
+        get{
+            return this._wavelv;
+        }
+        set{
+            if(enemy.Length<value){
+                _wavelv=(int)UnityEngine.Random.Range(0,enemy.Length-1);
+            }else{
+                _wavelv=value;
+            }
+        }
+    }
     int NameCounter;
     void Start () {
         NameCounter = 1;
@@ -48,7 +60,6 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
     /// </summary>
     void checkPlayerLv () {
         int nextwave=UnityEngine.Random.Range(0,WaveLv+1);
-        print(nextwave);
         InstanceEnemy (UnityEngine.Random.Range (-5.5f, 0.5f),nextwave);
     }
     void InstanceEnemy (float randompos, int EnemyLv = 0) {

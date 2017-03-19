@@ -795,12 +795,13 @@ MonoBehaviour:
   Police: 100
   enemy:
   - {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
-  - {fileID: 0}
+  - {fileID: 1066517332545148, guid: 359ad54186357f74d9f2033dd9752030, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   Limit: 10
   Counter: 0
+  WaveLv: 0
 --- !u!1 &590274148
 GameObject:
   m_ObjectHideFlags: 0

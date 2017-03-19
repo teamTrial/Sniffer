@@ -22,7 +22,7 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     public float HP = 15;
     // public float MP=15;
     private float OldHP;
-    float Exp=0;
+    float Exp = 0;
     public int Lv = 1;
 
     void Start () {
@@ -79,12 +79,11 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     void LevelUp () {
         Lv++;
         Exp = 0;
-        print("レベルアップ");
-        NextWave(Lv);
+        print ("レベルアップ");
+        NextWave (Lv);
     }
-    void NextWave(int Lv){
-
-        if(Lv%2==0){
+    void NextWave (int Lv) {
+        if (Lv % 2 == 0) {
             EnemyStatusDB.Instance.WaveLv++;
         }
     }
