@@ -7,7 +7,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
 #if UNITY_EDITOR
     public List<Status> EnemyVisible = new List<Status> ();
 #endif
-    public Dictionary < string,float > Enemy = new Dictionary < string, float > ();
+    public Dictionary<string, float> Enemy = new Dictionary<string, float> ();
     public int normalPeople = 10;
     public int Police = 100;
     // public int police;
@@ -18,15 +18,15 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
     Transform rightpos;
     Transform leftpos;
     private int _wavelv;
-    public int WaveLv{
-        get{
+    public int WaveLv {
+        get {
             return this._wavelv;
         }
-        set{
-            if(enemy.Length<value){
-                _wavelv=(int)UnityEngine.Random.Range(0,enemy.Length-1);
-            }else{
-                _wavelv=value;
+        set {
+            if (enemy.Length < value) {
+                _wavelv = (int) UnityEngine.Random.Range (0, enemy.Length - 1);
+            } else {
+                _wavelv = value;
             }
         }
     }
@@ -37,8 +37,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
         leftpos = GameObject.Find ("Left").transform;
         Counter = 0;
         Observable.Timer (TimeSpan.FromSeconds (5), TimeSpan.FromSeconds (2))
-            .Where (_ => 0 <= Counter && Counter < Limit)
-            .Subscribe (_ => {
+            .Where (_ => 0 <= Counter && Counter<Limit) .Subscribe (_ => {
                 checkPlayerLv ();
             }).AddTo (this.gameObject);
     }
@@ -59,8 +58,8 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
     /// プレイヤーのレベルに応じて召喚するNPCを変える
     /// </summary>
     void checkPlayerLv () {
-        int nextwave=UnityEngine.Random.Range(0,WaveLv+1);
-        InstanceEnemy (UnityEngine.Random.Range (-5.5f, 0.5f),nextwave);
+        int nextwave = UnityEngine.Random.Range (0, WaveLv + 1);
+        InstanceEnemy (UnityEngine.Random.Range (-5.5f, 0.5f), nextwave);
     }
     void InstanceEnemy (float randompos, int EnemyLv = 0) {
         if ((Counter % 2) == 0) {

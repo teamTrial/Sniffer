@@ -31,6 +31,7 @@ public class people : MonoBehaviour {
     [HeaderAttribute ("目線")]
     public float height = 0.5f;
     public LayerMask PlayerMask;
+    bool handflag;
     /// <summary>
     /// カメラ内か否かのフラグ　true =カメラ内　false=カメラ外
     /// </summary>
@@ -38,7 +39,6 @@ public class people : MonoBehaviour {
     protected int NPCHP () {
         return Random.Range (HP - 5, HP + 3);
     }
-
     protected void Start () {
         EnemyDB = EnemyStatusDB.Instance;
         if (this.tag == "Player") {
@@ -66,12 +66,6 @@ public class people : MonoBehaviour {
             }
         }
     }
-
-    protected void OnTriggerStay2D (Collider2D other) {
-        if (other.tag == "MainCamera") {
-            EyeLine (other);
-        }
-    }
     protected void OnTriggerEnter2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             inCamera = true;
@@ -85,11 +79,16 @@ public class people : MonoBehaviour {
         if (other.tag == "hand") {
             print ("当たった");
             speed = 0;
-            BattleDir (GameObject.FindGameObjectWithTag("Player").transform.localScale.x);
+            BattleDir (GameObject.FindGameObjectWithTag ("Player").transform.localScale.x);
             battle.StartBattle (this.gameObject, HP, Enemytag);
         }
         if (other.tag == "stand") {
             print ("構えるモーション接触");
+        }
+    }
+    protected void OnTriggerStay2D (Collider2D other) {
+        if (other.tag == "MainCamera") {
+            EyeLine (other);
         }
     }
     //見えなくなったら
@@ -109,7 +108,7 @@ public class people : MonoBehaviour {
         } else {
             dir = -1;
         }
-        this.transform.localScale = new Vector2 (dir * Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y);
+        this.transform.localScale = new Vector2 (dir * Mathf.Abs (this.transform.localScale.x), this.transform.localScale.y);
 
     }
     protected void Walk () {
@@ -142,6 +141,12 @@ public class people : MonoBehaviour {
         if (hit.collider) {
             if (hit.collider.tag == "hand") {
                 Escape ();
+            } else if (hit.collider.tag == "Player") {
+                if (PlayerController.BattleFlag) {
+                    if(speed!=0){
+                    Escape ();
+                    }
+                }
             }
         }
     }
