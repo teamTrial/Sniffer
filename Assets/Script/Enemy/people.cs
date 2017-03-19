@@ -13,9 +13,12 @@ public class people : MonoBehaviour {
             counter = 0;
         }
     }
+    public string NPCColor = "NULL";
+    [HideInInspector]
     public int HP;
     protected Count count;
     public float speed = 1f;
+    public string Enemytag;
     private InstanceEnemy Right, Left;
     private StageManager StageManager;
     private Battle battle;
@@ -27,6 +30,11 @@ public class people : MonoBehaviour {
     public float maxDistance = 3;
     [HeaderAttribute ("目線")]
     public float height = 0.5f;
+    public LayerMask PlayerMask;
+    /// <summary>
+    /// カメラ内か否かのフラグ　true =カメラ内　false=カメラ外
+    /// </summary>
+    bool inCamera;
     protected int NPCHP () {
         return Random.Range (HP - 5, HP + 3);
     }
@@ -35,6 +43,7 @@ public class people : MonoBehaviour {
         EnemyDB = EnemyStatusDB.Instance;
         if (this.tag == "Player") {
             this.GetComponent<people> ().enabled = false;
+            maxDistance = 0;
         }
         count = new Count ();
         sniffer = transform.FindChild ("HP").GetComponent<SniffeUI> ();
@@ -44,7 +53,9 @@ public class people : MonoBehaviour {
         speed = speed * Random.Range (0.3f, 1.0f);
     }
     protected void Update () {
-        if (!PlayerController.BattleFlag) {
+        if (PlayerController.BattleFlag && !inCamera) {
+
+        } else {
             Walk ();
             if (count.countdowsflag) {
                 count.counter += Time.deltaTime;
@@ -55,9 +66,15 @@ public class people : MonoBehaviour {
             }
         }
     }
-    protected void OnTriggerEnter2D (Collider2D other) {
+
+    protected void OnTriggerStay2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             EyeLine (other);
+        }
+    }
+    protected void OnTriggerEnter2D (Collider2D other) {
+        if (other.tag == "MainCamera") {
+            inCamera = true;
             count.counter = 0;
             count.countdowsflag = false;
         }
@@ -66,12 +83,10 @@ public class people : MonoBehaviour {
 
         //至近距離でプレイヤーに接触した場合
         if (other.tag == "hand") {
-            // Destroy(this.gameObject);
-            // StageManager.EnemyNum=StageManager.EnemyNum+1;
-            // StageManager.UpdateNum();
             print ("当たった");
-            // GetComponent<Battle>().enabled=true;
-            battle.StartBattle (this.gameObject, HP);
+            speed = 0;
+            BattleDir (GameObject.FindGameObjectWithTag("Player").transform.localScale.x);
+            battle.StartBattle (this.gameObject, HP, Enemytag);
         }
         if (other.tag == "stand") {
             print ("構えるモーション接触");
@@ -80,10 +95,23 @@ public class people : MonoBehaviour {
     //見えなくなったら
     protected void OnTriggerExit2D (Collider2D other) {
         if (other.tag == "MainCamera") {
+            inCamera = false;
             count.countdowsflag = true;
         }
     }
+    /// <summary>
+    /// バトル開始時背後を取られていたら振り向くように
+    /// </summary>
+    void BattleDir (float playerDir) {
+        var dir = 1;
+        if (playerDir < 0) {
+            dir = 1;
+        } else {
+            dir = -1;
+        }
+        this.transform.localScale = new Vector2 (dir * Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y);
 
+    }
     protected void Walk () {
         int direction = 1;
         direction = Dir ();
@@ -121,7 +149,7 @@ public class people : MonoBehaviour {
         //Rayの長さ
         Vector2 dir = RayDirection ();
         Vector2 pos = new Vector2 (transform.position.x + (dir.x * 0.5f), transform.position.y + height);
-        RaycastHit2D hit = Physics2D.Raycast (pos, dir, maxDistance);
+        RaycastHit2D hit = Physics2D.Raycast (pos, dir, maxDistance, PlayerMask);
 #if UNITY_EDITOR
         Debug.DrawRay (pos, dir * maxDistance, Color.green);
 #endif

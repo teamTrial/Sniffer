@@ -6,6 +6,7 @@ public class normalPeople : people {
 
     new void Start () {
         base.Start();
+        Enemytag="Normal";
         HP = EnemyDB.normalPeople;
         HP = NPCHP ();
         EnemyDB.EntryEnemy (this.gameObject.name, HP);

@@ -7,21 +7,18 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
 #if UNITY_EDITOR
     public List<Status> EnemyVisible = new List<Status> ();
 #endif
-    public Dictionary < string,float > Enemy = new Dictionary < string,float > ();
+    public Dictionary < string,float > Enemy = new Dictionary < string, float > ();
     public int normalPeople = 10;
-    public int Police=100;
-    public int police;
-    public GameObject enemy;
+    public int Police = 100;
+    // public int police;
+    public GameObject[] enemy;
     public int Limit = 10;
     public int Counter;
     Transform pos;
-    Transform rightpos,
-    leftpos;
+    Transform rightpos;
+    Transform leftpos;
+    public int WaveLv=0;
     int NameCounter;
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
     void Start () {
         NameCounter = 1;
         rightpos = GameObject.Find ("Right").transform;
@@ -30,7 +27,7 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
         Observable.Timer (TimeSpan.FromSeconds (5), TimeSpan.FromSeconds (2))
             .Where (_ => 0 <= Counter && Counter < Limit)
             .Subscribe (_ => {
-                InstanceEnemy (UnityEngine.Random.Range (-5.5f, 0.5f));
+                checkPlayerLv ();
             }).AddTo (this.gameObject);
     }
     public void EntryEnemy (String EnemyName, float HP) {
@@ -46,15 +43,23 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
         Enemy.Remove (EnemyName);
         Counter--;
     }
-    void InstanceEnemy (float randompos) {
+    /// <summary>
+    /// プレイヤーのレベルに応じて召喚するNPCを変える
+    /// </summary>
+    void checkPlayerLv () {
+        int nextwave=UnityEngine.Random.Range(0,WaveLv+1);
+        print(nextwave);
+        InstanceEnemy (UnityEngine.Random.Range (-5.5f, 0.5f),nextwave);
+    }
+    void InstanceEnemy (float randompos, int EnemyLv = 0) {
         if ((Counter % 2) == 0) {
             pos = rightpos;
         } else {
             pos = leftpos;
         }
-        var ins = Instantiate (enemy, pos).gameObject;
+        var ins = Instantiate (enemy[EnemyLv], pos).gameObject;
         NameCounter++;
-        ins.name = enemy.name + NameCounter;
+        ins.name = enemy[EnemyLv].name + NameCounter;
         if (GameObject.Find ("Main Camera").transform.position.x < pos.position.x) {
             //左向き左移動
             ins.transform.position = new Vector3 (pos.transform.position.x + (-randompos), pos.transform.position.y, pos.transform.position.z);

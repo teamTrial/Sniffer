@@ -29,10 +29,8 @@ public class PlayerController : MonoBehaviour {
     float LongTap = 0;
     Animator anim;
     float OldCameraSize;
-    PlayerStatus playerstatus;
     void Start () {
         center = GameObject.Find ("UI/center").GetComponent<Button> ();
-        playerstatus = GameObject.Find ("Manager").GetComponent<PlayerStatus> ();
         OldCameraSize = Camera.main.orthographicSize;
         Attack ();
         PlayerDirectoin = true;
@@ -48,7 +46,7 @@ public class PlayerController : MonoBehaviour {
     public void EndBattle (int cooltime = 20) {
         if (BattleFlag) {
             BattleFlag = false;
-            playerstatus.Heel (cooltime);
+            PlayerDB.Instance.Heel (cooltime);
         }
     }
     /// <summary>
@@ -144,9 +142,6 @@ public class PlayerController : MonoBehaviour {
         }
     }
     public void StartBattle () {
-        this.UpdateAsObservable ()
-            .TakeWhile (NotCentor => CenterFlag)
-            .Subscribe (_ => print ("バトル開始!"));
         BattleFlag = true;
     }
     void Walk (Vector3 walk) {
