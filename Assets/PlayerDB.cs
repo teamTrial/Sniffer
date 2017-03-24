@@ -71,7 +71,6 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
                 Death ();
             }
         }
-        print ("OldAP:"+OldAP);
         AP = AP_ui.fillAmount * 5;
         HP = HP_ui.fillAmount * OldHP;
     }
@@ -81,7 +80,9 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     /// OldAPが3になった場合最低値が3になるように
     /// </summary>
     void AttentionPointSystem (float heelPoint) {
-        if ((int) OldAP < AP) {
+        OldAP=(Mathf.Floor(OldAP));
+        print(OldAP);
+        if  (OldAP< AP) {
             AP_ui.fillAmount -= heelPoint;
         }
     }
