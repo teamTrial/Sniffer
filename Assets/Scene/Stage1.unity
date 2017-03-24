@@ -430,7 +430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -441,7 +441,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.456
+  m_FillAmount: 0.069
   m_FillClockwise: 0
   m_FillOrigin: 2
 --- !u!222 &189020897
@@ -753,6 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1584f6d6ef1507c4ab1261e7013df92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AP: 0
   HP: 15
   Lv: 1
 --- !u!114 &506633765
@@ -1248,7 +1249,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0
+  m_FillAmount: 0.367
   m_FillClockwise: 0
   m_FillOrigin: 2
 --- !u!222 &1133564696
