@@ -74,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4764219845501272}
   - component: {fileID: 61726141574839562}
-  - component: {fileID: 114789854613110986}
   m_Layer: 8
   m_Name: hand
   m_TagString: hand
@@ -247,17 +246,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   speed: 2
---- !u!114 &114789854613110986
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1986584251604272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be793246361de6c49a6a391b8e2d80bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114897814660798634
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -4,16 +4,13 @@ using UnityEngine;
 /// <summary>
 /// プレイヤーを見つけたときのアクションを実装する
 /// </summary>
-interface IEyLine {
-    /// <summary>
-    /// プレイヤーを見つけたときのアクションを実装する
-    /// </summary>
-    void EyeLine (Collider2D other);
+interface IAction {
+    void Action ();
 }
 /// <summary>
 /// /// 歩くや視線などの移動処理、トリガー系を実装
 /// </summary>
-public class human : MonoBehaviour, IEyLine {
+public class human : MonoBehaviour, IAction {
     public class Count {
         public int limit;
         public float counter;
@@ -42,7 +39,6 @@ public class human : MonoBehaviour, IEyLine {
     [HeaderAttribute ("目線")]
     public float height = 0.5f;
     public LayerMask PlayerMask;
-    bool handflag;
     /// <summary>
     /// カメラ内か否かのフラグ　true =カメラ内　false=カメラ外
     /// </summary>
@@ -118,13 +114,29 @@ public class human : MonoBehaviour, IEyLine {
             dir = -1;
         }
         this.transform.localScale = new Vector2 (dir * Mathf.Abs (this.transform.localScale.x), this.transform.localScale.y);
-
     }
 
     // /// <summary>
     // /// NPCの視線
     // /// </summary>
-    public virtual void EyeLine (Collider2D other) { }
+    protected virtual void EyeLine (Collider2D other) {
+        //レイヤーマスク作成
+        RaycastHit2D hit = HitObj ();
+        if (hit.collider) {
+            if (hit.collider.tag == "hand") {
+                Action ();
+            } else if (hit.collider.tag == "Player") {
+                if (PlayerController.BattleFlag) {
+                    //speed=0　誰かが戦っているとき
+                    if (speed != 0) {
+                        Action ();
+                    }
+                }
+            }
+        }
+    }
+    //視線にプレイヤーをとらえたときの動作
+    public virtual void Action(){}
     protected RaycastHit2D HitObj () {
         //Rayの長さ
         Vector2 dir = RayDirection ();
@@ -142,12 +154,13 @@ public class human : MonoBehaviour, IEyLine {
         }
         return Vector2.right;
     }
-    protected void Walk () {
+    protected virtual void Walk () {
         int direction = 1;
         direction = Dir ();
         this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
     }
-    protected int Dir () {
+    //進む方向に関する処理
+    protected virtual int Dir () {
         int direction;
         //左
         if (this.transform.localScale.x < 0) {

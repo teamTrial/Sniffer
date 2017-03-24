@@ -1,84 +1,103 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
-public class police : people {
+public class police : human, IAction {
+    //プレイヤーとの距離
+    float offset;
+    float _offset=2f;
     new void Start () {
         base.Start ();
-        HP = EnemyDB.Police;
-        HP = NPCHP ();
-        EnemyDB.EntryEnemy (this.gameObject.name, HP);
+        offset=_offset;
+        HP = EnemyDB.normalPeople;
+        //テスト
+        Action ();
     }
-    bool Awareness;
-    GameObject Player;
-    new void Update () {
-        base.Update ();
-        // if (!PlayerController.BattleFlag) {
-        //     Walk ();
-        //     if (count.countdowsflag) {
-        //         count.counter += Time.deltaTime;
-        //     }
-        //     if (count.limit < count.counter) {
-        //         EnemyDB.DeleteEnemy (this.name);
-        //         Destroy (this.gameObject);
-        //     }
-        // } else {
-        //     Awareness = false;
-        // }
-    }
-    new void Walk () {
-        print (Awareness);
-        if (Awareness) {
-            int direction = 1;
-            direction = Dir ();
-            this.transform.position = Player.transform.position * Time.deltaTime;
-        } else {
-            int direction = 1;
-            direction = Dir ();
-            this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
-        }
-    }
-    new void OnTriggerEnter2D (Collider2D other) {
-        if (other.tag == "MainCamera") {
-            count.counter = 0;
-            count.countdowsflag = false;
-        }
-        //snifferアクション時魂を表示する処理を記入
-        if (other.tag == "controller") return;
 
-        //至近距離でプレイヤーに接触した場合
-        if (other.tag == "hand") {
-            Awareness = true;
-            Player = other.gameObject;
-            Attack ();
-        }
-    }
-    new  void OnTriggerStay2D (Collider2D other) {
-        if (other.tag == "MainCamera") {
-            EyeLine (other);
-        }
-    }
-    new public void EyeLine (Collider2D other) {
+    // /// <summary>
+    // /// NPCの視線
+    // /// </summary>
+    protected override void EyeLine (Collider2D other) {
         //レイヤーマスク作成
         RaycastHit2D hit = HitObj ();
-        //なにかと衝突した時だけそのオブジェクトの名前をログに出す
         if (hit.collider) {
-        print(hit.collider.name);
-            
+            //攻撃する瞬間を見たら
             if (hit.collider.tag == "hand") {
-                Awareness = true;
-                Player = other.gameObject;
-                Attack ();
-            }
-            if (hit.collider.tag == "Player") {
-                print ("攻撃喰らったわ");
+                LevelFive();
+            } else if (hit.collider.tag == "Player") {
+                if (PlayerController.BattleFlag) {
+                    //speed=0　誰かが戦っているとき
+                    if (speed != 0) {
+                        LevelFive();
+                        return;
+                    }
+                    Action();
+                }
             }
         }
     }
     /// <summary>
-    /// 攻撃しているときにPlayerを見たら発砲するように
+    /// 認知度が高かった時にプレイヤーを見つけたら
     /// </summary>
-    void Attack () {
-        print ("攻撃");
+    public override void Action () {
+        LevelFive();
+    }
+    void LevetOne () {
+
+    }
+    void LevelTwo () {
+
+    }
+    void LevelThree () {
+
+    }
+    void LevelFour () {
+
+    }
+    void LevelFive () {
+        var Player = GameObject.FindGameObjectWithTag ("Player");
+        //認知度マックス　遠距離攻撃とかする
+        this.UpdateAsObservable ()
+            .Subscribe (_ => {
+                var EnemyPos = Player.transform.position;
+                EnemyPos.x = Player.transform.position.x + offset;
+                this.transform.position = Vector3.Lerp (this.transform.position, EnemyPos, Time.deltaTime);
+            });
+    }
+    protected override void Walk () {
+        int direction = 1;
+        float PlayerDir = Mathf.Abs (this.transform.localScale.x);
+        //if(戦ってない時)
+        direction = Dir ();
+        this.transform.localScale = new Vector2 (newDir () * PlayerDir, this.transform.localScale.y);
+        this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
+    }
+    int newDir () {
+        int direction;
+        var Player = GameObject.FindGameObjectWithTag ("Player").transform;
+        //左
+        if (this.transform.localScale.x < 0) {
+            direction = -1;
+            offset = _offset;
+            if (this.transform.position.x < Player.position.x) {
+                direction = 1;
+                offset = -_offset;
+                return direction;
+            }
+        }
+        //右
+        else {
+            direction = 1;
+            offset = -_offset;
+            if (Player.position.x < this.transform.position.x) {
+                direction = -1;
+                offset = _offset;
+                return direction;
+            }
+        }
+
+        return direction;
     }
 }

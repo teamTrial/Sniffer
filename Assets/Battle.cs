@@ -38,7 +38,7 @@ public class Battle : MonoBehaviour {
             playercontroller.EndBattle ();
             people NPCInfo=NPC.GetComponent<people> ();
             NPCInfo.HP = EnemyHP;
-            NPCInfo.Escape();
+            NPCInfo.Action();
             NPC.transform.FindChild ("HP").GetComponent<SniffeUI> ().UpdateSize ();
         });
     }
@@ -59,7 +59,7 @@ public class Battle : MonoBehaviour {
         var NPC_AI = Player.GetComponent<people> ();
         Player.GetComponent<Collider2D>().isTrigger=true;
         NPC_AI.enabled = true;
-        NPC_AI.Escape ();
+        NPC_AI.Action ();
         Player.layer = LayerMask.NameToLayer ("Default");
         Player.tag = "enemy";
     }

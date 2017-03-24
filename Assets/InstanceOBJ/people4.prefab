@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4567822134279096}
   - component: {fileID: 61599205000095154}
-  - component: {fileID: 114266880821109114}
   m_Layer: 8
   m_Name: hand
   m_TagString: hand
@@ -216,17 +215,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114266880821109114
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1287162261830702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be793246361de6c49a6a391b8e2d80bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114536580917677306
 MonoBehaviour:
   m_ObjectHideFlags: 1
