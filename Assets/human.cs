@@ -42,7 +42,7 @@ public class human : MonoBehaviour, IAction {
     /// <summary>
     /// カメラ内か否かのフラグ　true =カメラ内　false=カメラ外
     /// </summary>
-    bool inCamera;
+   protected bool inCamera;
     public float speed = 1f;
     protected void Start () {
         EnemyDB = EnemyStatusDB.Instance;
@@ -71,7 +71,7 @@ public class human : MonoBehaviour, IAction {
             }
         }
     }
-    protected void OnTriggerEnter2D (Collider2D other) {
+    protected virtual void OnTriggerEnter2D (Collider2D other) {
         if (other.tag == "MainCamera") {
             inCamera = true;
             count.counter = 0;
@@ -155,6 +155,10 @@ public class human : MonoBehaviour, IAction {
         return Vector2.right;
     }
     protected virtual void Walk () {
+        if(police.BattleFlag){
+            Action();
+            return;
+        }
         int direction = 1;
         direction = Dir ();
         this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);

@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour {
         this.UpdateAsObservable ()
             .TakeWhile (clearFlag => !StageClear.ClearFlag)
             .Where (distance => Input.GetMouseButton (0))
+            .Where(PoliceButtle=>!police.BattleFlag)
             .Select (distance => {
                 Center = GetPovit ();
                 return FingerPos (Input.mousePosition);
@@ -152,6 +153,7 @@ public class PlayerController : MonoBehaviour {
         var doubleclick = center.onClick.AsObservable ();
         doubleclick
             .Where (attack => !PlayerController.BattleFlag)
+            .Where(PoliceButtle=>!police.BattleFlag)
             // 0.2秒以内のメッセージをまとめる
             .Buffer (doubleclick.Throttle (TimeSpan.FromMilliseconds (300)))
             // タップ回数が2回以上だったら処理する
@@ -166,6 +168,7 @@ public class PlayerController : MonoBehaviour {
             .Where (Center => PlayerController.CenterFlag)
             .Where (SnifferFlag => !SnifferActionFlag)
             .Where (attack => !attackFlag)
+            .Where(PoliceButtle=>!police.BattleFlag)
             .Subscribe (_ => {
                 if (Input.GetMouseButton (0)) {
                     LongTap += Time.deltaTime;

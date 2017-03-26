@@ -31,6 +31,7 @@ public class Battle : MonoBehaviour {
             }).AddTo (this.gameObject);
         //ズームの時間を取得
         AnimatorStateInfo cameraAnim = Camera.main.GetComponent<Animator> ().GetCurrentAnimatorStateInfo (0);
+        //ズームしてx秒経ったらタイムアップ
         CameraAnimationTime = cameraAnim.length + 2;
         //タイムアップが来たら
         Observable.Timer (TimeSpan.FromSeconds (CameraAnimationTime)).Subscribe (_ => {

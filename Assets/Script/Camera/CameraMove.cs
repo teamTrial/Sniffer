@@ -50,12 +50,12 @@ public class CameraMove : MonoBehaviour {
     }
     void Update () {
         DrawCamera ();
-        if (PlayerController.BattleFlag) {
+        if (PlayerController.BattleFlag||police.BattleFlag) {
             BattleAnimation.SetFloat ("Zoom", 1f);
             var CentorPos = new Vector3 (target.transform.position.x, Mathf.Lerp (hight, hight / 2, 1f), this.transform.position.z);
             transform.position = CentorPos;
             return;
-        } else {
+        } else  if (!PlayerController.BattleFlag) {
             BattleAnimation.SetFloat ("Zoom", -2f);
         }
 
