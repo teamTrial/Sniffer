@@ -12,11 +12,11 @@ public class people : human, IAction {
         Escape ();
     }
     void Escape () {
-        this.transform.localScale = new Vector2 (EscapeDir()*this.transform.localScale.x, this.transform.localScale.y);
+        this.transform.localScale = new Vector2 (EscapeDir () * this.transform.localScale.x, this.transform.localScale.y);
         this.GetComponent<people> ().speed = 2;
     }
-    int EscapeDir(){
-           int direction;
+    int EscapeDir () {
+        int direction;
         var Player = GameObject.FindGameObjectWithTag ("Player").transform;
         //左
         if (this.transform.localScale.x < 0) {
