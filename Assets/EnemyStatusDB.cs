@@ -36,8 +36,11 @@ public class EnemyStatusDB : SingletonMonoBehaviour<EnemyStatusDB> {
         rightpos = GameObject.Find ("Right").transform;
         leftpos = GameObject.Find ("Left").transform;
         Counter = 0;
-        Observable.Timer (TimeSpan.FromSeconds (5), TimeSpan.FromSeconds (2))
-            .Where (_ => 0 <= Counter && Counter<Limit) .Subscribe (_ => {
+       //NPC生成ロジック
+        var InstanceEnemyStream = Observable.Timer (TimeSpan.FromSeconds (5), TimeSpan.FromSeconds (2));
+        InstanceEnemyStream
+            .TakeWhile (isFadeing => !FadeManager.Instance.isFading)
+            .Where (_ => 0 <= Counter && Counter < Limit).Subscribe (_ => {
                 checkPlayerLv ();
             }).AddTo (this.gameObject);
     }

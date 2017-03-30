@@ -154,10 +154,12 @@ public class human : MonoBehaviour, IAction {
         }
         return Vector2.right;
     }
+    /// <summary>
+    ///　NPCの歩く動作処理
+    /// </summary>
     protected virtual void Walk () {
         if(police.BattleFlag){
             Action();
-            return;
         }
         int direction = 1;
         direction = Dir ();

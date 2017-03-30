@@ -11,6 +11,12 @@ public class Battle : MonoBehaviour {
     void Start () {
         playercontroller = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
     }
+    /// <summary>
+    /// N秒間X回クリックのバトルシステム
+    /// </summary>
+    /// <param name="NPC">NPCのゲームオブジェクト</param>
+    /// <param name="HP">NPCのHP</param>
+    /// <param name="Enemytag">NPCが何者なのかのタグ</param>
     public void StartBattle (GameObject NPC, int HP = 10,String Enemytag="") {
         int EnemyHP = HP;
         // タップダウンストリームを作成
@@ -24,7 +30,7 @@ public class Battle : MonoBehaviour {
                 EnemyHP = HP - totalCount + 1;
                 PlayerDB.Instance.Damage (NPC.name, EnemyHP);
             })
-            .Where (totalCount => HP < totalCount)
+            .Where (totalCount => HP < totalCount)//プレイヤーが死んだら
             .Subscribe (totalCount => {
                 var Player = GameObject.FindGameObjectWithTag ("Player");
                 ChangeController (NPC, Player,Enemytag);

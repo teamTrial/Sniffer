@@ -21,18 +21,21 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     /// <summary>
     /// AttentionPoint=AP 注目度に関するポイント
     /// </summary>
+    [HeaderAttribute ("注目度に関するポイント")]
     public float AP = 0;
     private float OldAP = 0;
     GameObject cameraShake;
     // Status Player = new Status ("Player",15);
     public float HP = 15;
-    // public float MP=15;
     private float OldHP;
     float Exp = 0;
     public int Lv = 1;
-
+    private PlayerController playercontroller;
+    private Animator BattleAnimation;
     void Start () {
         OldHP = HP;
+        playercontroller = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
+        BattleAnimation = Camera.main.GetComponent<Animator> ();
 #if UNITY_EDITOR
         // Heel (0);
 #endif
@@ -48,11 +51,11 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
             }).AddTo (this.gameObject);
     }
 
-    public void Damage (String EnemyName, int EnemyHP) {
-        iTween.ShakePosition (cameraShake, new Vector2 (0.1f, 0.1f), 0.3f);
-        var random = UnityEngine.Random.Range (0.005f, 0.02f);
+    public void Damage (String EnemyName, int EnemyHP, float min = 0.005f, float max = 0.02f) {
+        var random = UnityEngine.Random.Range (min, max);
         EnemyStatusDB.Instance.Enemy[EnemyName] = EnemyHP;
         SyncHP (false, random);
+        iTween.ShakePosition (cameraShake, new Vector2 (0.1f, 0.1f), 0.3f);
     }
     /// <summary>
     /// UIのHPとPlayerのHPを同期させる
@@ -68,7 +71,9 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
             AP_ui.fillAmount += damage;
             OldAP = AP;
             if (HP <= 0) {
-                Death ();
+                if (police.BattleFlag || PlayerController.BattleFlag) {
+                    Death ();
+                }
             }
         }
         AP = AP_ui.fillAmount * 5;
@@ -80,9 +85,9 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     /// OldAPが3になった場合最低値が3になるように
     /// </summary>
     void AttentionPointSystem (float heelPoint) {
-        OldAP=(Mathf.Floor(OldAP));
-        print(OldAP);
-        if  (OldAP< AP) {
+        OldAP = (Mathf.Floor (OldAP));
+        print (OldAP);
+        if (OldAP < AP) {
             AP_ui.fillAmount -= heelPoint;
         }
     }
@@ -94,6 +99,16 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     }
     void Death () {
         print ("プレイヤー死亡");
+        //警察に殺されました
+        if (police.BattleFlag) {
+            police.PoliceWinFlag=true;
+        }
+        //NPCに殺されました
+        if(PlayerController.BattleFlag){
+
+        }
+        police.BattleFlag = false;
+        playercontroller.EndBattle ();
     }
     void LevelUp () {
         Lv++;
