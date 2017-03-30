@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
@@ -10,11 +11,13 @@ public class police : human, IAction {
     float _offset = 0.7f;
     public float CameraAnimationTime;
     public static bool BattleFlag = false;
+    public static bool PoliceWinFlag = false;
     new void Start () {
         base.Start ();
         BattleFlag = false;
+        PoliceWinFlag = false;
         offset = _offset;
-        HP = EnemyDB.normalPeople;
+        HP = EnemyDB.Police;
 
         //テスト
         Action ();
@@ -37,27 +40,7 @@ public class police : human, IAction {
             print ("構えるモーション接触");
         }
     }
-    void StartBattle (GameObject NPC, int HP = 10) {
-        print("バトル");
-        int EnemyHP = HP;
-        // タップダウンストリームを作成
-        var tapDownStream = this.UpdateAsObservable ()
-            .Where (_ => Input.GetMouseButtonDown (0));
-        tapDownStream
-            .Select (_ => 1)
-            .TakeWhile (NotCentor => PlayerController.BattleFlag)
-            .Scan ((sum, addCount) => sum + addCount)
-            .Do (totalCount => {
-                EnemyHP = HP - totalCount + 1;
-                PlayerDB.Instance.Damage (NPC.name, EnemyHP);
-            })
-            .Where (totalCount => HP < totalCount)
-            .Subscribe (totalCount => {
-                var Player = GameObject.FindGameObjectWithTag ("Player");
-            }).AddTo (this.gameObject);
-        //ズームの時間を取得
-        AnimatorStateInfo cameraAnim = Camera.main.GetComponent<Animator> ().GetCurrentAnimatorStateInfo (0);
-    }
+
     // /// <summary>
     // /// NPCの視線
     // /// </summary>
@@ -99,10 +82,15 @@ public class police : human, IAction {
     void LevelFour () {
 
     }
+    /// <summary>
+    /// 最高認知度の時
+    /// Playerに襲い掛かり強制戦闘をする
+    /// </summary>
     void LevelFive () {
         var Player = GameObject.FindGameObjectWithTag ("Player");
         //認知度マックス　遠距離攻撃とかする
         this.UpdateAsObservable ()
+            .TakeWhile (_ => !PoliceWinFlag)
             .Where (_ => !BattleFlag)
             .Subscribe (_ => {
                 var EnemyPos = Player.transform.position;
@@ -115,18 +103,44 @@ public class police : human, IAction {
                 }
             });
     }
+    /// <summary>
+    /// X秒間の間隔でPlayerにダメージを与える
+    /// </summary>
+    /// <param name="NPC"></param>
+    /// <param name="HP">NPCのHP</param>
+    void StartBattle (GameObject NPC, int HP = 10) {
+        print ("policeバトル");
+        int EnemyHP = HP;
+        var PoliceButtleStream = Observable.Timer (TimeSpan.FromSeconds (1), TimeSpan.FromSeconds (0.1d));
+        PoliceButtleStream
+            .TakeWhile (_ => !PoliceWinFlag)
+            .Select (_ => 1)
+            .Scan ((sum, addCount) => sum + addCount)
+            .Subscribe (totalCount => {
+                EnemyHP = HP - totalCount + 1;
+                PlayerDB.Instance.Damage (NPC.name, EnemyHP, 0.01f, 0.04f);
+            }).AddTo (this.gameObject);
+    }
     protected override void Walk () {
-        if(BattleFlag){
+        if (BattleFlag) {
+            return;
+        }
+        if(PoliceWinFlag){
+            base.Walk();
             return;
         }
         int direction = 1;
         float PlayerDir = Mathf.Abs (this.transform.localScale.x);
         //if(戦ってない時)
         direction = Dir ();
-        this.transform.localScale = new Vector2 (newDir () * PlayerDir, this.transform.localScale.y);
+        this.transform.localScale = new Vector2 (oppositePlayerDir () * PlayerDir, this.transform.localScale.y);
         this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
     }
-    int newDir () {
+    /// <summary>
+    /// 警察がPlayerの方を向くように(=プレイヤーの向きと逆向きになるように)
+    /// </summary>
+    /// <returns>向き</returns>
+    int oppositePlayerDir () {
         int direction;
         var Player = GameObject.FindGameObjectWithTag ("Player").transform;
         //左
