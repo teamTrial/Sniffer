@@ -123,9 +123,9 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
         var Player = GameObject.FindGameObjectWithTag ("Player");
         var PlayerDir = Player.transform.localScale;
         policeInfo.GetComponent<human> ().speed = 1f;
-       var hoge=policeInfo.transform.localScale;
-       hoge.x=-hoge.x;
-        policeInfo.transform.localScale=hoge; 
+        var PoliceDir = policeInfo.transform.localScale;
+        PoliceDir.x = -PoliceDir.x;
+        policeInfo.transform.localScale = PoliceDir;
         this.UpdateAsObservable ()
             .Subscribe (_ => {
                 var EnemyPos = policeInfo.transform.position;
