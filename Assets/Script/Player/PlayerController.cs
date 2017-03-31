@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     void GetDistancefromPovittoFinger () {
         this.UpdateAsObservable ()
-            .TakeWhile (clearFlag => !StageClear.ClearFlag)
+            .TakeWhile (clearFlag => !StageClear.ClearFlag||!police.PoliceWinFlag)
             .Where (distance => Input.GetMouseButton (0))
             .Where(PoliceButtle=>!police.BattleFlag)
             .Select (distance => {

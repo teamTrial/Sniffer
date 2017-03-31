@@ -118,7 +118,7 @@ public class police : human, IAction {
             .Scan ((sum, addCount) => sum + addCount)
             .Subscribe (totalCount => {
                 EnemyHP = HP - totalCount + 1;
-                PlayerDB.Instance.Damage (NPC.name, EnemyHP, 0.01f, 0.04f);
+                PlayerDB.Instance.Damage (NPC.name, EnemyHP, 0.01f, 0.04f,this.gameObject);
             }).AddTo (this.gameObject);
     }
     protected override void Walk () {

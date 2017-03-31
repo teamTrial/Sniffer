@@ -32,6 +32,8 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     public int Lv = 1;
     private PlayerController playercontroller;
     private Animator BattleAnimation;
+    private GameObject policeInfo;
+    private float offset = 0.2f;
     void Start () {
         OldHP = HP;
         playercontroller = GameObject.Find ("UI/Controller").GetComponent<PlayerController> ();
@@ -51,9 +53,12 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
             }).AddTo (this.gameObject);
     }
 
-    public void Damage (String EnemyName, int EnemyHP, float min = 0.005f, float max = 0.02f) {
+    public void Damage (String EnemyName, int EnemyHP, float min = 0.005f, float max = 0.02f, GameObject Police = null) {
         var random = UnityEngine.Random.Range (min, max);
         EnemyStatusDB.Instance.Enemy[EnemyName] = EnemyHP;
+        if (Police != null) {
+            policeInfo = Police;
+        }
         SyncHP (false, random);
         iTween.ShakePosition (cameraShake, new Vector2 (0.1f, 0.1f), 0.3f);
     }
@@ -101,14 +106,61 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
         print ("プレイヤー死亡");
         //警察に殺されました
         if (police.BattleFlag) {
-            police.PoliceWinFlag=true;
+            Arrest ();
+            police.PoliceWinFlag = true;
         }
         //NPCに殺されました
-        if(PlayerController.BattleFlag){
+        if (PlayerController.BattleFlag) {
 
         }
         police.BattleFlag = false;
         playercontroller.EndBattle ();
+    }
+    /// <summary>
+    /// 逮捕されて連行される
+    /// </summary>
+    void Arrest () {
+        var Player = GameObject.FindGameObjectWithTag ("Player");
+        var PlayerDir = Player.transform.localScale;
+        policeInfo.GetComponent<human> ().speed = 1f;
+       var hoge=policeInfo.transform.localScale;
+       hoge.x=-hoge.x;
+        policeInfo.transform.localScale=hoge; 
+        this.UpdateAsObservable ()
+            .Subscribe (_ => {
+                var EnemyPos = policeInfo.transform.position;
+                EnemyPos.x = policeInfo.transform.position.x + offset;
+                Player.transform.position = Vector3.Lerp (Player.transform.position, policeInfo.transform.position, Time.deltaTime);
+            }).AddTo (this.gameObject);
+        PlayerDir.x = oppositePlayerDir () * PlayerDir.x;
+        Player.transform.localScale = PlayerDir;
+        Observable.Timer (TimeSpan.FromSeconds (2)).Subscribe (_ => {
+            FadeManager.Instance.LoadLevel ("localSelect", 0.5f);
+            Destroy (GameObject.Find ("Manager"));
+        });
+    }
+
+    int oppositePlayerDir () {
+        int direction;
+        var Player = GameObject.FindGameObjectWithTag ("Player").transform;
+        //左
+        if (Player.localScale.x < 0) {
+            direction = -1;
+            if (Player.localScale.x < policeInfo.transform.position.x) {
+                direction = 1;
+                return direction;
+            }
+        }
+        //右
+        else {
+            direction = 1;
+            if (policeInfo.transform.position.x < Player.localScale.x) {
+                direction = -1;
+                return direction;
+            }
+        }
+
+        return direction;
     }
     void LevelUp () {
         Lv++;
