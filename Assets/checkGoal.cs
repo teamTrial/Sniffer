@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
 /// <summary>
@@ -7,54 +10,46 @@ using UnityEngine;
 /// </summary>
 
 public class checkGoal : MonoBehaviour {
+    public string SceneName;
+    public float loadtime = 2f;
     public string checkColor;
-	public enum Dir{
-		left,
-		right
-	};
-	
-	public Dir _dir;
-	bool timer;
-	float time;
-	
 
-	/// <summary>
-	/// Update is called every frame, if the MonoBehaviour is enabled.
-	/// </summary>
-	void Update()
-	{
-		if(timer){
-			time+=Time.deltaTime;
-		}
-		if(time>2){
-			timer=false;
-			time=0;
-			FadeManager.Instance.LoadLevel("localSelect",2);
-			Destroy(GameObject.Find("Manager"));
-			GameObject.Find ("UI/Controller").GetComponent<PlayerController> ().enabled=false;
-		}
-	}
-    /// <summary>
-    /// Sent when an incoming collider makes contact with this object's
-    /// collider (2D physics only).
-    /// </summary>
-    /// <param name="Player">The Collision2D data associated with this collision.</param>
+    public enum Dir {
+        left,
+        right
+    }
+
+    public Dir _dir;
+
     void OnCollisionEnter2D (Collision2D Player) {
         if (Player.gameObject.tag == "Player") {
-            if (Player.gameObject.GetComponent<people> ().NPCColor == checkColor) {
+            if (Player.gameObject.GetComponent<human> ().NPCColor == checkColor) {
                 this.GetComponent<BoxCollider2D> ().isTrigger = true;
-				time=0;
-				timer=true;
             }
         }
     }
-    void OnCollisionExit2D (Collision2D Player) {
+
+    void OnTriggerExit2D (Collider2D Player) {
         if (Player.gameObject.tag == "Player") {
             if (Player.gameObject.GetComponent<people> ().NPCColor == checkColor) {
                 this.GetComponent<BoxCollider2D> ().isTrigger = false;
-				timer=false;
-				time=0;
+                LeftorRight ();
             }
+        }
+    }
+    void LeftorRight () {
+        var Player = GameObject.FindWithTag ("Player");
+        if (_dir == Dir.right) {
+            Comparison (this.transform, Player.transform);
+        } else if (_dir == Dir.left) {
+            Comparison (Player.transform, this.transform);
+        }
+    }
+    void Comparison (Transform A, Transform B) {
+        if (A.position.x < B.position.x) {
+            StageClear.ClearFlag = true;
+            FadeManager.Instance.LoadLevel (SceneName, loadtime);
+            Destroy (GameObject.Find ("Manager"));
         }
     }
 }

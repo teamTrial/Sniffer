@@ -35,20 +35,8 @@ public class CameraMove : MonoBehaviour {
         transform.parent = null;
         stageController = GetComponent<StageController> ();
     }
-    /// <summary>
-    /// Sent each frame where another object is within a trigger collider
-    /// attached to this object (2D physics only).
-    /// </summary>
-    /// <param name="other">The other Collider2D involved in this collision.</param>
-    void OnTriggerStay2D(Collider2D other)
-    {
-       if(PlayerController.SnifferActionFlag){
-           if(other.tag=="enemy"){
-               
-           }
-       }
-    }
     void Update () {
+
         DrawCamera ();
         if (PlayerController.BattleFlag||police.BattleFlag) {
             BattleAnimation.SetFloat ("Zoom", 1f);
@@ -59,6 +47,9 @@ public class CameraMove : MonoBehaviour {
             BattleAnimation.SetFloat ("Zoom", -2f);
         }
 
+        if(police.PoliceWinFlag){
+            return;
+        }
         float xMoveDelta = (target.position - lastTargetPosition).x;
         bool updateLookAheadTarget = Mathf.Abs (xMoveDelta) > lookAheadMoveThreshold;
 
