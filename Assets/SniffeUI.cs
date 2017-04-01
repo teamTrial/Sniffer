@@ -6,6 +6,10 @@ public class SniffeUI : MonoBehaviour {
     SpriteRenderer UI;
     Transform parent;
     Vector3 DefSize;
+    /// <summary>
+    /// NPCの基準のHP
+    /// </summary>
+    float AverageSize;
     float MaxHP, afterHP;
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -18,13 +22,15 @@ public class SniffeUI : MonoBehaviour {
         if (parent.tag == "Player") {
             this.GetComponent<SniffeUI> ().enabled = false;
         }
-        DefSize = this.transform.localScale;
-
         try {
             MaxHP = (int) EnemyStatusDB.Instance.Enemy[parent.name];
         } catch (KeyNotFoundException) {
             EnemyStatusDB.Instance.EntryEnemy (parent.name, 10);
         }
+    }
+    public void checkDefSize(float npcHP ,float average){
+        this.transform.localScale=(npcHP/average)*this.transform.localScale;
+        DefSize = this.transform.localScale;
     }
     /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.

@@ -116,6 +116,7 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     }
     public void getExp (float EnemyExp) {
         Exp += EnemyExp;
+        print("Exp"+Exp+"獲得");
         if (Lv <= Exp) {
             LevelUp ();
         }

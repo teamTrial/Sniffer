@@ -9,6 +9,7 @@ public class normalPeople : people {
         Enemytag="Normal";
         HP = EnemyDB.normalPeople;
         HP = NPCHP ();
+        sniffer.checkDefSize(HP,EnemyDB.normalPeople);
         EnemyDB.EntryEnemy (this.gameObject.name, HP);
     }
 }

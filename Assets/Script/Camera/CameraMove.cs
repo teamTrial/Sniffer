@@ -36,7 +36,6 @@ public class CameraMove : MonoBehaviour {
         stageController = GetComponent<StageController> ();
     }
     void Update () {
-
         DrawCamera ();
         if (PlayerController.BattleFlag||police.BattleFlag) {
             BattleAnimation.SetFloat ("Zoom", 1f);
