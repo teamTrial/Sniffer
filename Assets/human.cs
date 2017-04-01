@@ -82,6 +82,9 @@ public class human : MonoBehaviour, IAction {
 
         //至近距離でプレイヤーに接触した場合
         if (other.tag == "hand") {
+            if(police.BattleFlag){
+                return;
+            }
             print ("当たった");
             speed = 0;
             BattleDir (GameObject.FindGameObjectWithTag ("Player").transform.localScale.x);

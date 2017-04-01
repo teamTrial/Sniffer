@@ -5,7 +5,7 @@ using UnityEngine;
 public class StageClear : MonoBehaviour {
 	public string SceneName;
 	public float loadtime=2f;
-	public static bool ClearFlag{get;private set;}
+	public static bool ClearFlag{get;set;}
 	void Start () {
 		ClearFlag=false;
 	}
@@ -16,9 +16,10 @@ public class StageClear : MonoBehaviour {
 	/// <param name="other">The other Collider2D involved in this collision.</param>
 	void OnTriggerEnter2D(Collider2D other)
 	{	
-		if(other.tag=="controller"){
+		if(other.tag=="Player"){
 			ClearFlag=true;
 			FadeManager.Instance.LoadLevel(SceneName,loadtime);
+			Destroy(GameObject.Find("Manager"));
 		}
 	}
 }

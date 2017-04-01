@@ -18,9 +18,9 @@ public class police : human, IAction {
         PoliceWinFlag = false;
         offset = _offset;
         HP = EnemyDB.Police;
-
-        //テスト
-        Action ();
+        EnemyDB.EntryEnemy (this.gameObject.name, HP);
+        // //テスト
+        // Action ();
     }
     protected override void OnTriggerEnter2D (Collider2D other) {
         if (other.tag == "MainCamera") {
@@ -41,34 +41,44 @@ public class police : human, IAction {
         }
     }
 
-    // /// <summary>
-    // /// NPCの視線
-    // /// </summary>
+    /// <summary>
+    /// NPCからRayを飛ばして触れたものを認識する(=視線)
+    /// </summary>
     protected override void EyeLine (Collider2D other) {
-        //レイヤーマスク作成
         RaycastHit2D hit = HitObj ();
         if (hit.collider) {
             //攻撃する瞬間を見たら
             if (hit.collider.tag == "hand") {
+                //認知度MAXになる
                 LevelFive ();
+                return;
             } else if (hit.collider.tag == "Player") {
                 if (PlayerController.BattleFlag) {
-                    //speed=0　誰かが戦っているとき
+                    //speed==0　誰かが戦っているとき
                     if (speed != 0) {
                         LevelFive ();
                         return;
                     }
                     Action ();
                 }
-
             }
         }
     }
     /// <summary>
-    /// 認知度が高かった時にプレイヤーを見つけたら
+    /// APに応じて適した動作を
     /// </summary>
     public override void Action () {
-        LevelFive ();
+        if (PlayerDB.Instance.AP == 1) {
+            LevetOne ();
+        } else if (PlayerDB.Instance.AP == 2) {
+            LevelTwo ();
+        } else if (PlayerDB.Instance.AP == 3) {
+            LevelThree ();
+        } else if (PlayerDB.Instance.AP == 4) {
+            LevelFour ();
+        } else if (PlayerDB.Instance.AP == 5) {
+            LevelFive ();
+        }
     }
     void LevetOne () {
 
@@ -88,6 +98,9 @@ public class police : human, IAction {
     /// </summary>
     void LevelFive () {
         var Player = GameObject.FindGameObjectWithTag ("Player");
+
+        //認知度をマックスにする
+        PlayerDB.Instance.AP = 5;
         //認知度マックス　遠距離攻撃とかする
         this.UpdateAsObservable ()
             .TakeWhile (_ => !PoliceWinFlag)
@@ -109,7 +122,8 @@ public class police : human, IAction {
     /// <param name="NPC"></param>
     /// <param name="HP">NPCのHP</param>
     void StartBattle (GameObject NPC, int HP = 10) {
-        print ("policeバトル");
+        //プレイヤーが警察の正面を向くように
+        PlayerDB.Instance.opposite (this.gameObject);
         int EnemyHP = HP;
         var PoliceButtleStream = Observable.Timer (TimeSpan.FromSeconds (1), TimeSpan.FromSeconds (0.1d));
         PoliceButtleStream
@@ -118,46 +132,49 @@ public class police : human, IAction {
             .Scan ((sum, addCount) => sum + addCount)
             .Subscribe (totalCount => {
                 EnemyHP = HP - totalCount + 1;
-                PlayerDB.Instance.Damage (NPC.name, EnemyHP, 0.01f, 0.04f,this.gameObject);
+                PlayerDB.Instance.Damage (NPC.name, EnemyHP, 0.01f, 0.04f, this.gameObject);
             }).AddTo (this.gameObject);
     }
     protected override void Walk () {
         if (BattleFlag) {
             return;
         }
-        if(PoliceWinFlag){
-            base.Walk();
+        if (PoliceWinFlag || !PlayerController.BattleFlag) {
+            //通常の歩き
+            base.Walk ();
             return;
         }
+        var Player = GameObject.FindGameObjectWithTag ("Player").transform;
         int direction = 1;
         float PlayerDir = Mathf.Abs (this.transform.localScale.x);
-        //if(戦ってない時)
         direction = Dir ();
-        this.transform.localScale = new Vector2 (oppositePlayerDir () * PlayerDir, this.transform.localScale.y);
+        this.transform.localScale = new Vector2 (oppositePlayerDir (this.gameObject.transform, Player) * PlayerDir, this.transform.localScale.y);
         this.transform.Translate (direction * speed * Time.deltaTime, 0, 0);
     }
     /// <summary>
     /// 警察がPlayerの方を向くように(=プレイヤーの向きと逆向きになるように)
+    /// AがBの正面を向くように
     /// </summary>
+    /// <param name="A">こっちの向きを変える</param>
+    /// <param name="B">これと正面になるように</param>
     /// <returns>向き</returns>
-    int oppositePlayerDir () {
+    int oppositePlayerDir (Transform A, Transform B) {
         int direction;
-        var Player = GameObject.FindGameObjectWithTag ("Player").transform;
-        //左
-        if (this.transform.localScale.x < 0) {
+        //Aが左を向いているとき
+        if (A.localScale.x < 0) {
             direction = -1;
             offset = _offset;
-            if (this.transform.position.x < Player.position.x) {
+            if (A.position.x < B.position.x) {
                 direction = 1;
                 offset = -_offset;
                 return direction;
             }
         }
-        //右
+        //Aが右を向いているとき
         else {
             direction = 1;
             offset = -_offset;
-            if (Player.position.x < this.transform.position.x) {
+            if (B.position.x < A.position.x) {
                 direction = -1;
                 offset = _offset;
                 return direction;

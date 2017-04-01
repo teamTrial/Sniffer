@@ -57,7 +57,7 @@ public class SniffeUI : MonoBehaviour {
     /// 親オブジェクトの残りHPに応じてサイズを変更する
     /// </summary>
     void ChangeSize () {
-        if(police.PoliceWinFlag){
+        if(police.PoliceWinFlag||StageClear.ClearFlag){
             return;
         }
         afterHP = EnemyStatusDB.Instance.Enemy[parent.name];

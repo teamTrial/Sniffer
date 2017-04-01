@@ -15,7 +15,7 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
 
     public Image AP_ui {
         get {
-            return GameObject.Find ("UI/MP").GetComponent<Image> ();
+            return GameObject.Find ("UI/AP").GetComponent<Image> ();
         }
     }
     /// <summary>
@@ -24,15 +24,23 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     [HeaderAttribute ("注目度に関するポイント")]
     public float AP = 0;
     private float OldAP = 0;
-    GameObject cameraShake;
-    // Status Player = new Status ("Player",15);
     public float HP = 15;
     private float OldHP;
+    /// <summary>
+    /// 経験値(LVに影響)
+    /// </summary>
     float Exp = 0;
+    /// <summary>
+    /// プレイヤーのレベル(NPCのウェーブに影響)
+    /// </summary>
     public int Lv = 1;
+    /// <summary>
+    /// バトル時のカメラが揺れる奴
+    /// </summary>
+    GameObject cameraShake;
     private PlayerController playercontroller;
     private Animator BattleAnimation;
-    private GameObject policeInfo;
+    private GameObject PoliceInfo;
     private float offset = 0.2f;
     void Start () {
         OldHP = HP;
@@ -43,7 +51,12 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
 #endif
         cameraShake = Camera.main.gameObject;
     }
-
+    /// <summary>
+    /// HPを回復、APを減らす
+    /// </summary>
+    /// <param name="interval">
+    /// 開始するまでの時間
+    /// </param>
     public void Heel (int interval = 20) {
         this.UpdateAsObservable ()
             .TakeWhile (NotCentor => !PlayerController.BattleFlag)
@@ -57,9 +70,10 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
         var random = UnityEngine.Random.Range (min, max);
         EnemyStatusDB.Instance.Enemy[EnemyName] = EnemyHP;
         if (Police != null) {
-            policeInfo = Police;
+            PoliceInfo = Police;
         }
         SyncHP (false, random);
+        //カメラをがくがくさせる
         iTween.ShakePosition (cameraShake, new Vector2 (0.1f, 0.1f), 0.3f);
     }
     /// <summary>
@@ -90,8 +104,12 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     /// OldAPが3になった場合最低値が3になるように
     /// </summary>
     void AttentionPointSystem (float heelPoint) {
+        //認知度MAXの場合は処理を中断
+        if (5 <= AP) {
+            return;
+        }
+        //小数点を切り捨てる
         OldAP = (Mathf.Floor (OldAP));
-        print (OldAP);
         if (OldAP < AP) {
             AP_ui.fillAmount -= heelPoint;
         }
@@ -122,45 +140,48 @@ public class PlayerDB : SingletonMonoBehaviour<PlayerDB> {
     void Arrest () {
         var Player = GameObject.FindGameObjectWithTag ("Player");
         var PlayerDir = Player.transform.localScale;
-        policeInfo.GetComponent<human> ().speed = 1f;
-        var PoliceDir = policeInfo.transform.localScale;
+        PoliceInfo.GetComponent<human> ().speed = 1f;
+        var PoliceDir = PoliceInfo.transform.localScale;
         PoliceDir.x = -PoliceDir.x;
-        policeInfo.transform.localScale = PoliceDir;
-        this.UpdateAsObservable ()
-            .Subscribe (_ => {
-                var EnemyPos = policeInfo.transform.position;
-                EnemyPos.x = policeInfo.transform.position.x + offset;
-                Player.transform.position = Vector3.Lerp (Player.transform.position, policeInfo.transform.position, Time.deltaTime);
-            }).AddTo (this.gameObject);
-        PlayerDir.x = oppositePlayerDir () * PlayerDir.x;
-        Player.transform.localScale = PlayerDir;
-        Observable.Timer (TimeSpan.FromSeconds (2)).Subscribe (_ => {
+        PoliceInfo.transform.localScale = PoliceDir;
+        //3秒後ステージセレクトへ
+        Observable.Timer (TimeSpan.FromSeconds (3.5f)).Subscribe (_ => {
             FadeManager.Instance.LoadLevel ("localSelect", 0.5f);
             Destroy (GameObject.Find ("Manager"));
         });
+        this.UpdateAsObservable ()
+            .Subscribe (_ => {
+                var EnemyPos = PoliceInfo.transform.position;
+                EnemyPos.x = PoliceInfo.transform.position.x + offset;
+                Player.transform.position = Vector3.Lerp (Player.transform.position, PoliceInfo.transform.position, 1.2f*Time.deltaTime);
+            });
+        opposite (PoliceInfo);
     }
-
-    int oppositePlayerDir () {
+    /// <summary>
+    /// プレイヤーがPoliceの正面を向くように
+    /// </summary>
+    /// <param name="Police"></param>
+    public void opposite (GameObject Police) {
         int direction;
         var Player = GameObject.FindGameObjectWithTag ("Player").transform;
-        //左
-        if (Player.localScale.x < 0) {
+        var newPlayerDir = Player.transform.localScale;
+        //Playerが右を向いているとき
+        if (0 < Player.localScale.x) {
             direction = -1;
-            if (Player.localScale.x < policeInfo.transform.position.x) {
+            //プレイヤーが右を向いている&Policeが右側にいるとき
+            if (Player.position.x < Police.transform.position.x) {
                 direction = 1;
-                return direction;
             }
         }
-        //右
+        //Playerが左を向いているとき
         else {
-            direction = 1;
-            if (policeInfo.transform.position.x < Player.localScale.x) {
-                direction = -1;
-                return direction;
+            direction = -1;
+            if (Police.transform.position.x < Player.position.x) {
+                direction = 1;
             }
         }
-
-        return direction;
+        newPlayerDir.x = direction * newPlayerDir.x;
+        Player.transform.localScale = newPlayerDir;
     }
     void LevelUp () {
         Lv++;
