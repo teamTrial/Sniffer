@@ -234,7 +234,7 @@ MonoBehaviour:
   PlayerMask:
     serializedVersion: 2
     m_Bits: 256
-  speed: 2
+  speed: 1
 --- !u!114 &114696696379422164
 MonoBehaviour:
   m_ObjectHideFlags: 1

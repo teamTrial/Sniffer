@@ -222,11 +222,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -3.86
+      value: -8.43
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.308
+      value: 0.31
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -259,7 +259,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalScale.x
-      value: -0.4693472
+      value: 0.4693472
       objectReference: {fileID: 0}
     - target: {fileID: 1596776687896712, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_IsActive
@@ -324,7 +324,7 @@ Prefab:
     - target: {fileID: 114324222217695334, guid: 95a09f404c57f4947a76047d0e3ad59f,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 70379501510374742, guid: 95a09f404c57f4947a76047d0e3ad59f,
         type: 2}
@@ -1161,7 +1161,7 @@ GameObject:
   - component: {fileID: 1133564695}
   - component: {fileID: 1133564694}
   m_Layer: 5
-  m_Name: MP
+  m_Name: AP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1268,11 +1268,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -6.32
+      value: -10.77
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.25
+      value: 0.29
       objectReference: {fileID: 0}
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1297,6 +1297,10 @@ Prefab:
     - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075990031729778, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.4693472
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95a09f404c57f4947a76047d0e3ad59f, type: 2}
@@ -1610,9 +1614,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0, y: 4.3817964}
   serializedVersion: 2
-  m_Size: {x: 1.24, y: 2.7}
+  m_Size: {x: 1.24, y: 11.463587}
 --- !u!212 &1430639345
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1672,6 +1676,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe95a0ed2f4867c4996b241a25964a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneName: localSelect
+  loadtime: 2
   checkColor: GREEN
   _dir: 1
 --- !u!50 &1430639348
@@ -1724,9 +1730,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 1.7652131}
   serializedVersion: 2
-  m_Size: {x: 0.58, y: 1.2}
+  m_Size: {x: 0.5799993, y: 4.7304296}
 --- !u!212 &1451120489
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1769,7 +1775,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1451120487}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.3, y: 0.19, z: 90}
+  m_LocalPosition: {x: -20.38, y: 0.19, z: 90}
   m_LocalScale: {x: 1.0037584, y: 1.1877439, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1786,6 +1792,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe95a0ed2f4867c4996b241a25964a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneName: localSelect
+  loadtime: 2
   checkColor: RED
   _dir: 0
 --- !u!50 &1451120492
@@ -1807,7 +1815,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 1
+  m_Constraints: 5
 --- !u!1 &1575582484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,7 +2237,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1929531507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.5, y: 0.3, z: 90}
+  m_LocalPosition: {x: 17.52, y: 0.24, z: 90}
   m_LocalScale: {x: 0.4693472, y: 0.43488535, z: 1}
   m_Children:
   - {fileID: 591383112}
@@ -2249,9 +2257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43645c2fad77ffe48805bd984b3cb9c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NPCColor: NULL
+  NPCColor: GREEN
   HP: 15
-  Enemytag: 
+  Enemytag: GREEN
   maxDistance: 0
   height: 0.5
   PlayerMask:
