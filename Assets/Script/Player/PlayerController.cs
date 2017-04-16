@@ -146,6 +146,9 @@ public class PlayerController : MonoBehaviour {
         BattleFlag = true;
     }
     void Walk (Vector3 walk) {
+        if(StageClear.ClearFlag){
+            return;
+        }
         Player.transform.Translate (walk);
         setAnimation (1);
     }
