@@ -9,6 +9,7 @@ TagManager:
   - hand
   - stand
   - enemy
+  - stage
   layers:
   - Default
   - TransparentFX
